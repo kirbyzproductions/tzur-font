@@ -1392,10 +1392,18 @@ async function offer(filename, data){
     a.href = url; a.download = filename; document.body.append(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 4000);
     toast('ירד: ' + filename);
+    track(filename);
   }catch(e){ toast('ההורדה לא הצליחה. נסו שוב'); }
 }
 const slug = () => (S.preset && !S.preset.startsWith('mine:') ? S.preset : S.shape.mode);
 const fname = ext => 'tzur-font-' + slug() + '.' + ext;
+// anonymous usage counts (GoatCounter, no cookies): which file type and style people download
+function track(filename){
+  try{
+    const ext = filename.split('.').pop(), kind = filename.includes('-board-') ? 'board' : ext;
+    if(window.goatcounter && window.goatcounter.count) window.goatcounter.count({path:'download/' + kind + '/' + slug(), title:'הורדה: ' + kind, event:true});
+  }catch(e){}
+}
 function bigCanvas(W, H, cb){
   const c = document.createElement('canvas'); c.width = W; c.height = H;
   const ctx = c.getContext('2d'); ctx.setTransform(1,0,0,1,0,0);
@@ -1501,5 +1509,6 @@ new MutationObserver(() => { drawEd(); drawThumbs(); }).observe(document.documen
 </script>
 
 
+<script data-goatcounter="https://tzurfont.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
