@@ -1,0 +1,1505 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="צור-פונט: סטודיו חינמי ליצירת פונטים עבריים בדפדפן. 25 סגנונות, עורך אותיות, ייצוא ל-OTF, PNG ו-SVG.">
+<meta property="og:title" content="צור-פונט">
+<meta property="og:description" content="סטודיו חינמי ליצירת פונטים עבריים בדפדפן">
+<style>[hidden]{display:none!important}body{margin:0}</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%232B37F0%22/%3E%3Ctext x=%2232%22 y=%2246%22 font-size=%2240%22 font-family=%22Arial%22 font-weight=%22700%22 text-anchor=%22middle%22 fill=%22white%22%3E%D7%A6%3C/text%3E%3C/svg%3E">
+<title>צור-פונט · סטודיו לפונטים עבריים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karantina:wght@700&family=Assistant:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#E8E9E3; --surface:#F5F5F0; --raise:#FFFFFF; --ink:#151714; --muted:#676B63; --line:#CFD1C8; --line2:#B9BCB2;
+  --accent:#2B37F0; --accent-ink:#FFFFFF; --rim:#FF5A1F; --good:#1F8A4C;
+  --display:"Karantina","Assistant",system-ui,sans-serif;
+  --body:"Assistant","Segoe UI","Arial Hebrew",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ color-scheme:dark;
+    --ground:#111311; --surface:#1A1D1A; --raise:#232723; --ink:#ECEDE6; --muted:#9A9E95; --line:#343832; --line2:#4A4F47;
+    --accent:#7D87FF; --accent-ink:#0E1030; --rim:#FF7A45; --good:#4CC784; }
+}
+:root[data-theme="dark"]{ color-scheme:dark;
+  --ground:#111311; --surface:#1A1D1A; --raise:#232723; --ink:#ECEDE6; --muted:#9A9E95; --line:#343832; --line2:#4A4F47;
+  --accent:#7D87FF; --accent-ink:#0E1030; --rim:#FF7A45; --good:#4CC784; }
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:18px 60px}
+.wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{font-family:var(--display);font-size:64px;line-height:.8;letter-spacing:.01em;margin:0}
+.tag{color:var(--muted);margin:0;font-size:14px}
+.status{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.status.ok{color:var(--good)}
+
+.stage{border-radius:14px;overflow:hidden;position:relative;background:#EDEEE8;box-shadow:0 1px 0 rgba(0,0,0,.06)}
+#preview{display:block;width:100%;height:clamp(220px,38vw,420px);touch-action:none;cursor:grab}
+#preview.grab{cursor:grabbing}
+#preview:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.stagehint{position:absolute;top:10px;inset-inline-start:12px;font:600 12px var(--body);padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.72);color:#151714;pointer-events:none;backdrop-filter:blur(4px)}
+.stage textarea{position:absolute;inset-inline:12px;bottom:12px;width:auto;min-height:0;height:40px;resize:none;border-radius:10px;border:1px solid rgba(0,0,0,.12);
+  background:rgba(255,255,255,.84);color:#151714;font:600 17px var(--body);padding:7px 12px;direction:rtl;backdrop-filter:blur(6px)}
+.stage textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+
+.presets{display:flex;gap:8px;overflow-x:auto;padding-block:2px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.chip{flex:0 0 auto;display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 14px 6px 8px;font:600 15px var(--body);cursor:pointer;white-space:nowrap}
+.chip i{width:22px;height:22px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.15);font:700 13px var(--display);display:grid;place-items:center;line-height:1}
+.chip[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.minewrap{flex:0 0 auto;display:inline-flex;align-items:center;gap:2px}
+.minewrap .x{border:0;background:transparent;color:var(--muted);font:700 18px var(--body);cursor:pointer;width:32px;height:32px;border-radius:50%}
+.minewrap .x:hover{color:var(--rim);background:var(--surface)}
+.minewrap .x:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.rowtop{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.rowtop .row{gap:8px}
+
+.grid2{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.grid2{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:14px}
+.panel h2{margin:0;font:700 13px var(--body);letter-spacing:.08em;color:var(--muted)}
+details.sec{border-top:1px solid var(--line);padding-top:10px}
+details.sec:first-of-type{border-top:0;padding-top:0}
+details.sec summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;font:700 13px var(--body);letter-spacing:.08em;color:var(--muted);padding:4px 0}
+details.sec summary::-webkit-details-marker{display:none}
+details.sec summary::after{content:"+";font:700 16px var(--mono);color:var(--muted)}
+details.sec[open] summary::after{content:"−"}
+details.sec .body{display:flex;flex-direction:column;gap:10px;padding-top:8px}
+.slider{display:grid;grid-template-columns:72px 1fr 46px;align-items:center;gap:10px}
+.slider label{font-weight:600;font-size:14px}
+.slider output{font:500 12px var(--mono);text-align:left;font-variant-numeric:tabular-nums;color:var(--muted)}
+input[type=range]{width:100%;accent-color:var(--accent);margin:0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:var(--raise);color:var(--ink);border-radius:9px;padding:8px 12px;font:600 14px var(--body);cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.small{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn:focus-visible,.chip:focus-visible,.gl:focus-visible,.seg button:focus-visible,.fxh:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hint{font-size:13px;color:var(--muted);margin:0}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--raise)}
+.seg button{border:0;background:transparent;color:var(--ink);padding:6px 11px;font:600 13px var(--body);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--ground)}
+.colors{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.colors label{display:flex;flex-direction:column;gap:4px;font:600 12px var(--body);color:var(--muted)}
+.colors input[type=color]{width:100%;height:38px;border:1px solid var(--line);border-radius:9px;padding:2px;background:var(--raise);cursor:pointer}
+.tog{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;cursor:pointer}
+.tog input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+.fx{border:1px solid var(--line);border-radius:10px;background:var(--raise);overflow:hidden}
+.fxh{display:flex;align-items:center;gap:10px;padding:8px 10px;cursor:pointer;user-select:none}
+.fxh input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+.fxh b{font-weight:600;font-size:14px;flex:1}
+.fxh small{color:var(--muted);font:500 11px var(--mono)}
+.fxb{display:none;flex-direction:column;gap:8px;padding:4px 10px 10px;border-top:1px dashed var(--line)}
+.fx.on .fxb{display:flex}
+.fx.on .fxh{background:color-mix(in srgb, var(--accent) 10%, transparent)}
+input.name{border:1px solid var(--line);background:var(--raise);color:var(--ink);border-radius:9px;padding:7px 10px;font:600 14px var(--body);min-width:0;flex:1}
+
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tabs button{border:1px solid var(--line);background:var(--raise);color:var(--ink);border-radius:999px;padding:4px 12px;font:600 13px var(--body);cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.glyphs{display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:6px}
+.gl{position:relative;aspect-ratio:1;border:1px solid var(--line);background:var(--raise);border-radius:9px;padding:0;cursor:pointer;overflow:hidden}
+.gl canvas{width:100%;height:100%;display:block}
+.gl[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.gl.edited::after{content:"";position:absolute;top:5px;inset-inline-start:5px;width:6px;height:6px;border-radius:50%;background:var(--rim)}
+
+.editor{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:16px}
+@media (max-width:640px){.editor{grid-template-columns:1fr}}
+#ed{width:100%;aspect-ratio:1;max-width:100%;display:block;border-radius:10px;background:var(--raise);border:1px solid var(--line);touch-action:none;cursor:crosshair}
+.fields{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fields label{display:flex;flex-direction:column;gap:3px;font:600 12px var(--body);color:var(--muted)}
+.fields input,.num{width:100%;border:1px solid var(--line);background:var(--raise);color:var(--ink);border-radius:8px;padding:6px 8px;font:500 14px var(--mono);direction:ltr}
+.edside{display:flex;flex-direction:column;gap:12px}
+.edhead{display:flex;align-items:baseline;gap:10px}
+.edhead b{font-family:var(--display);font-size:44px;line-height:.9}
+.toast{position:fixed;inset-inline:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));margin:0 auto;max-width:420px;background:var(--ink);color:var(--ground);padding:10px 14px;border-radius:10px;font-weight:600;text-align:center;opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none;z-index:9}
+.toast.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+footer{color:var(--muted);font-size:12px}
+footer a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.seg button{min-height:36px}
+.btn{min-height:38px}
+.btn.small{min-height:34px}
+input.name:focus-visible,.fields input:focus-visible,.num:focus-visible,.tog input:focus-visible,.fxh input:focus-visible,input[type=range]:focus-visible,input[type=color]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.stagehint.warn{background:#FFE9A8;color:#4A3200}
+/* studio layout: preview stays in view while editing */
+.studio{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,400px);gap:16px;align-items:start}
+.view{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);display:flex;flex-direction:column;gap:10px;min-width:0}
+#preview{height:min(66vh,620px)}
+.ctl{gap:12px;min-width:0}
+.studio>*{min-width:0}
+.ctl .row .name{max-width:none}
+.tabbar{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-inline:-16px;padding-inline:12px;overflow-x:auto;scrollbar-width:none}
+.tabbar::-webkit-scrollbar{display:none}
+.tabbar button{flex:0 0 auto;border:0;background:transparent;color:var(--muted);font:700 14px var(--body);padding:9px 10px 10px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabbar button:hover{color:var(--ink)}
+.tabbar button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabbar button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.pane{display:flex;flex-direction:column;gap:12px}
+.pane[hidden]{display:none}
+.stack{display:flex;flex-direction:column;gap:10px}
+.fxgrid{display:flex;flex-direction:column;gap:6px}
+.fxh{padding:7px 10px}
+.editor{grid-template-columns:1fr}
+#ed{max-width:380px;margin-inline:auto}
+@media (max-width:860px){
+  .studio{grid-template-columns:1fr}
+  .view{top:env(safe-area-inset-top,0px);z-index:5;background:var(--ground);margin-inline:-16px;padding:8px 16px 10px;box-shadow:0 8px 12px -10px rgba(0,0,0,.25)}
+  #preview{height:clamp(150px,26vh,250px)}
+  .stage textarea{height:36px;font-size:16px;bottom:8px;inset-inline:8px}
+}
+</style>
+
+</head>
+<body>
+<div class="wrap" dir="rtl" lang="he">
+  <header>
+    <div>
+      <h1 class="logo">צור-פונט</h1>
+      <p class="tag">סטודיו לאותיות עבריות · 25 סגנונות · ייצוא לפונט</p>
+    </div>
+    <span class="status" id="status">טוען…</span>
+  </header>
+
+  <div class="studio">
+    <div class="view" id="view">
+      <div class="stage" id="stage">
+        <canvas id="preview" aria-label="תצוגה מקדימה של הטקסט"></canvas>
+        <span class="stagehint" id="stagehint" aria-live="polite">גוררים אות כדי להזיז אותה</span>
+        <textarea id="txt" rows="1" aria-label="טקסט לתצוגה" spellcheck="false">אותיות חיות</textarea>
+      </div>
+      <div class="presets" id="presets" role="group" aria-label="סגנונות"></div>
+    </div>
+
+    <section class="panel ctl" aria-label="הגדרות">
+      <div class="presets" id="mine" role="group" aria-label="הסגנונות שלי" hidden></div>
+      <div class="row">
+        <button class="btn" id="surprise" type="button">תפתיע אותי ✦</button>
+        <input class="name" id="styleName" placeholder="שם לסגנון" aria-label="שם לסגנון">
+        <button class="btn" id="saveStyle" type="button">שמירת סגנון</button>
+      </div>
+
+      <div class="tabbar" id="tabbar" role="tablist" aria-label="מה עורכים">
+        <button type="button" role="tab" id="t-shape" data-tab="shape">צורה</button>
+        <button type="button" role="tab" id="t-color" data-tab="color">צבע</button>
+        <button type="button" role="tab" id="t-fx" data-tab="fx">אפקטים</button>
+        <button type="button" role="tab" id="t-layout" data-tab="layout">פריסה</button>
+        <button type="button" role="tab" id="t-letters" data-tab="letters">אותיות</button>
+        <button type="button" role="tab" id="t-export" data-tab="export">ייצוא</button>
+      </div>
+
+      <div class="pane" data-pane="shape" role="tabpanel" aria-labelledby="t-shape">
+        <div class="seg" id="shapeSeg" role="group" aria-label="סוג צורה"></div>
+        <div id="shapeSliders" class="stack"></div>
+        <div class="row" id="capsRow" hidden>
+          <span class="hint">קצוות</span>
+          <div class="seg" id="capsSeg" role="group" aria-label="קצוות"><button type="button" data-v="round" aria-pressed="true">עגולים</button><button type="button" data-v="flat">חתוכים</button></div>
+        </div>
+        <div class="row">
+          <button class="btn small" id="stir" type="button">ערבוב ↻</button>
+          <span class="hint" id="seedv"></span>
+        </div>
+      </div>
+
+      <div class="pane" data-pane="color" role="tabpanel" aria-labelledby="t-color" hidden>
+        <div class="colors">
+          <label>אותיות<input type="color" id="cFill"></label>
+          <label>רקע<input type="color" id="cBg"></label>
+          <label>משני<input type="color" id="cAccent"></label>
+        </div>
+        <label class="tog"><input type="checkbox" id="fillOn"> מילוי לאותיות</label>
+        <span class="hint">צבע לפי אות</span>
+        <div class="seg" id="colMode" role="group" aria-label="צבע לפי אות">
+          <button type="button" data-v="one">אחיד</button><button type="button" data-v="alt">לסירוגין</button><button type="button" data-v="flow">מעבר</button><button type="button" data-v="rainbow">קשת</button><button type="button" data-v="random">אקראי</button>
+        </div>
+      </div>
+
+      <div class="pane" data-pane="fx" role="tabpanel" aria-labelledby="t-fx" hidden>
+        <p class="hint">מדליקים כמה שרוצים, הם נערמים אחד על השני.</p>
+        <div id="fxList" class="fxgrid"></div>
+      </div>
+
+      <div class="pane" data-pane="layout" role="tabpanel" aria-labelledby="t-layout" hidden>
+        <div id="layoutSliders" class="stack"></div>
+        <div class="stack" style="border-top:1px solid var(--line);padding-top:12px">
+          <span class="hint"><b style="color:var(--ink)">הזזת אותיות ביד:</b> גוררים אות בתצוגה. אחרי שבוחרים אות אפשר גם להזיז אותה עם החצים במקלדת (עם Shift הצעד גדול יותר).</span>
+          <div class="row"><span class="hint" id="mvSel">לא נבחרה אות</span></div>
+          <div class="row">
+            <button class="btn small" id="mvOne" type="button">החזרת האות למקום</button>
+            <button class="btn small" id="mvAll" type="button">החזרת כל האותיות</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pane" data-pane="letters" role="tabpanel" aria-labelledby="t-letters" hidden>
+        <div class="tabs" id="tabs"></div>
+        <div class="glyphs" id="glyphs"></div>
+        <div class="editor">
+          <canvas id="ed" aria-label="עורך האות"></canvas>
+          <div class="edside">
+            <div class="edhead"><b id="edch">א</b><span class="hint" id="edinfo"></span></div>
+            <p class="hint">גוררים נקודה כדי להזיז. נוגעים בנקודה, ואז גוררים את הטבעת הכתומה כדי לעבות או לדלל.</p>
+            <div class="fields">
+              <label>X<input id="fx" type="number" step="5"></label>
+              <label>Y<input id="fy" type="number" step="5"></label>
+              <label>עובי<input id="fr" type="number" step="1" min="4"></label>
+            </div>
+            <div class="row">
+              <button class="btn" id="addN" type="button">+ נקודה</button>
+              <button class="btn" id="delN" type="button">− נקודה</button>
+              <button class="btn" id="addS" type="button">+ קו חדש</button>
+              <button class="btn" id="undo" type="button">ביטול</button>
+            </div>
+            <div class="row">
+              <label class="hint" style="display:flex;gap:8px;align-items:center">רוחב האות
+                <input id="fw" class="num" type="number" step="10" min="0" style="width:84px">
+              </label>
+              <button class="btn" id="reset" type="button">איפוס האות</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pane" data-pane="export" role="tabpanel" aria-labelledby="t-export" hidden>
+        <div class="row"><span class="hint">שם הפונט</span><input class="name" id="fontName" value="TzurFont" dir="auto" aria-label="שם הפונט"></div>
+        <div class="row">
+          <button class="btn primary" id="xFont" type="button">פונט OTF</button>
+          <button class="btn" id="xPng" type="button">PNG</button>
+          <button class="btn" id="xSvg" type="button">SVG</button>
+          <button class="btn" id="xBoard" type="button">לוח אותיות</button>
+        </div>
+        <label class="tog"><input type="checkbox" id="transp"> רקע שקוף ב-PNG</label>
+        <p class="hint">ה-OTF מכיל את הצורה הנקייה של האותיות (בלי אפקטים). ה-PNG כולל הכל. ה-SVG: צורה וצבעים.</p>
+        <div class="row" style="border-top:1px solid var(--line);padding-top:12px">
+          <button class="btn" id="xJson" type="button">שמירת פרויקט</button>
+          <label class="btn" for="imp">טעינת פרויקט</label>
+          <input id="imp" type="file" accept=".json,application/json" hidden>
+        </div>
+        <p class="hint">קובץ הפרויקט כולל את הסגנונות השמורים ואת עריכות האותיות.</p>
+      </div>
+    </section>
+  </div>
+  <footer>העבודה נשמרת אוטומטית בדפדפן שלך בלבד. כדי להעביר אותה למכשיר אחר: ייצוא ← שמירת פרויקט.
+    · <a href="https://github.com/kirbyzproductions/tzur-font">קוד המקור בגיטהאב</a></footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script>/* Nozli engine: skeleton strokes -> field -> contours (liquid / mono / stencil / pixel) */
+(function (root) {
+  'use strict';
+  // Units: em 1000, baseline y=0, letter top ~560, y up. glyph = {w, s:[stroke], mark?}; stroke = [[x,y,r],...]
+  const BASE = {
+    'א': { w: 560, s: [[[110, 520, 55], [280, 290, 44], [450, 40, 55]], [[430, 525, 50], [400, 390, 40], [335, 305, 36]], [[120, 40, 50], [170, 150, 40], [215, 245, 36]]] },
+    'ב': { w: 580, s: [[[80, 510, 55], [370, 510, 55], [440, 440, 42], [440, 60, 46]], [[50, 50, 55], [520, 50, 55]]] },
+    'ג': { w: 400, s: [[[80, 510, 50], [240, 510, 50], [310, 440, 40], [320, 50, 45]], [[90, 40, 50], [180, 120, 40], [300, 200, 34]]] },
+    'ד': { w: 510, s: [[[60, 510, 55], [450, 510, 55]], [[380, 500, 42], [380, 50, 45]]] },
+    'ה': { w: 530, s: [[[60, 510, 55], [390, 510, 55], [450, 440, 42], [450, 50, 45]], [[110, 330, 40], [110, 50, 42]]] },
+    'ו': { w: 270, s: [[[50, 510, 50], [140, 510, 50], [190, 440, 40], [190, 50, 42]]] },
+    'ז': { w: 300, s: [[[40, 510, 55], [250, 510, 55]], [[150, 470, 40], [160, 50, 42]]] },
+    'ח': { w: 540, s: [[[100, 50, 42], [100, 460, 42], [160, 510, 55], [380, 510, 55], [440, 460, 42], [440, 50, 42]]] },
+    'ט': { w: 540, s: [[[230, 320, 34], [160, 460, 40], [80, 430, 42], [80, 150, 42], [180, 50, 55], [380, 50, 55], [460, 150, 42], [460, 510, 45]]] },
+    'י': { w: 240, s: [[[50, 510, 50], [130, 510, 50], [170, 450, 40], [160, 300, 34]]] },
+    'כ': { w: 540, s: [[[60, 510, 55], [370, 510, 55], [460, 420, 42], [460, 140, 42], [370, 50, 55], [60, 50, 55]]] },
+    'ך': { w: 470, s: [[[50, 510, 55], [330, 510, 55], [400, 440, 42], [400, -240, 42]]] },
+    'ל': { w: 530, s: [[[90, 830, 40], [90, 600, 40], [160, 520, 55], [400, 520, 55], [460, 440, 42], [430, 250, 40], [250, 60, 45]]] },
+    'מ': { w: 550, s: [[[60, 540, 50], [110, 300, 40], [120, 40, 45]], [[150, 470, 36], [220, 510, 55], [400, 510, 55], [460, 440, 42], [460, 50, 45], [300, 50, 55]]] },
+    'ם': { w: 540, s: [[[80, 50, 45], [80, 470, 42], [140, 510, 55], [400, 510, 55], [460, 450, 42], [460, 110, 42], [400, 50, 55], [80, 50, 55]]] },
+    'נ': { w: 320, s: [[[60, 510, 50], [170, 510, 50], [230, 440, 40], [230, 110, 42], [180, 50, 55], [40, 50, 55]]] },
+    'ן': { w: 260, s: [[[50, 510, 50], [130, 510, 50], [170, 450, 40], [170, -240, 42]]] },
+    'ס': { w: 540, s: [[[70, 510, 55], [380, 510, 55], [460, 420, 42], [460, 200, 42], [340, 50, 50], [190, 50, 50], [80, 200, 42], [70, 510, 45]]] },
+    'ע': { w: 520, s: [[[440, 520, 45], [380, 250, 40], [240, 80, 50], [40, 40, 55]], [[110, 520, 45], [170, 300, 40], [260, 150, 36]]] },
+    'ף': { w: 500, s: [[[160, 300, 34], [80, 340, 40], [80, 470, 45], [150, 510, 55], [360, 510, 55], [430, 440, 42], [430, -240, 42]]] },
+    'פ': { w: 540, s: [[[170, 300, 34], [90, 340, 40], [90, 470, 45], [160, 510, 55], [380, 510, 55], [460, 440, 42], [460, 140, 42], [380, 50, 55], [50, 50, 55]]] },
+    'ץ': { w: 480, s: [[[90, 520, 50], [150, 380, 42], [180, 200, 42], [180, -240, 42]], [[420, 520, 48], [400, 400, 40], [210, 300, 34]]] },
+    'צ': { w: 520, s: [[[90, 520, 50], [160, 340, 42], [330, 110, 42], [440, 50, 55]], [[40, 50, 55], [470, 50, 55]], [[420, 520, 48], [410, 380, 40], [300, 280, 34]]] },
+    'ק': { w: 540, s: [[[60, 510, 55], [380, 510, 55], [460, 440, 42], [460, 280, 40], [400, 220, 34]], [[100, 360, 42], [100, -240, 42]]] },
+    'ר': { w: 520, s: [[[60, 510, 55], [380, 510, 55], [450, 440, 42], [450, 50, 45]]] },
+    'ש': { w: 570, s: [[[80, 520, 48], [100, 200, 42], [200, 50, 55], [380, 50, 55], [470, 150, 42], [480, 520, 48]], [[275, 520, 45], [275, 300, 40], [265, 110, 38]]] },
+    'ת': { w: 540, s: [[[450, 50, 45], [450, 440, 42], [390, 510, 55], [170, 510, 55], [115, 460, 42], [115, 80, 42], [40, 50, 55]]] },
+    // digits
+    '0': { w: 500, s: [[[250, 540, 55], [100, 420, 42], [95, 150, 42], [250, 30, 55], [405, 150, 42], [400, 420, 42], [250, 540, 55]]] },
+    '1': { w: 360, s: [[[80, 420, 42], [210, 540, 45], [210, 40, 42]]] },
+    '2': { w: 500, s: [[[90, 440, 42], [170, 530, 50], [330, 530, 50], [410, 440, 42], [380, 320, 42], [90, 40, 45], [430, 40, 55]]] },
+    '3': { w: 500, s: [[[90, 470, 42], [180, 530, 50], [330, 530, 50], [400, 450, 42], [330, 300, 50], [220, 290, 45]], [[330, 300, 50], [420, 200, 42], [400, 80, 42], [300, 30, 50], [160, 30, 50], [80, 100, 42]]] },
+    '4': { w: 520, s: [[[350, 540, 42], [350, 40, 42]], [[350, 540, 42], [70, 160, 50], [470, 160, 50]]] },
+    '5': { w: 500, s: [[[400, 530, 55], [130, 530, 50], [100, 300, 45], [280, 330, 50], [400, 240, 42], [390, 90, 42], [280, 30, 50], [150, 30, 50], [80, 100, 42]]] },
+    '6': { w: 500, s: [[[390, 500, 45], [300, 540, 50], [170, 500, 45], [90, 320, 42], [100, 120, 42], [220, 30, 50], [350, 30, 50], [420, 140, 42], [400, 260, 42], [280, 300, 50], [120, 260, 45]]] },
+    '7': { w: 480, s: [[[70, 530, 55], [430, 530, 55], [200, 40, 45]]] },
+    '8': { w: 500, s: [[[250, 300, 50], [130, 370, 45], [130, 470, 45], [250, 540, 50], [370, 470, 45], [370, 370, 45], [250, 300, 50], [110, 220, 45], [110, 100, 45], [250, 30, 50], [390, 100, 45], [390, 220, 45], [250, 300, 50]]] },
+    '9': { w: 500, s: [[[110, 80, 45], [200, 30, 50], [330, 60, 45], [410, 240, 42], [400, 440, 42], [280, 540, 50], [150, 540, 50], [80, 430, 42], [100, 320, 42], [220, 270, 50], [380, 320, 45]]] },
+    // latin caps
+    'A': { w: 560, s: [[[60, 40, 42], [280, 540, 50], [500, 40, 42]], [[150, 210, 50], [410, 210, 50]]] },
+    'B': { w: 520, s: [[[90, 40, 42], [90, 520, 42]], [[90, 520, 55], [330, 520, 55], [400, 460, 42], [400, 340, 42], [330, 290, 50], [90, 290, 50]], [[90, 290, 50], [350, 290, 50], [430, 220, 42], [430, 110, 42], [350, 40, 55], [90, 40, 55]]] },
+    'C': { w: 540, s: [[[470, 450, 45], [400, 520, 50], [220, 540, 55], [90, 430, 42], [80, 150, 42], [220, 30, 55], [400, 40, 50], [470, 110, 45]]] },
+    'D': { w: 540, s: [[[90, 40, 42], [90, 520, 42]], [[90, 520, 55], [300, 520, 55], [440, 420, 42], [450, 150, 42], [300, 40, 55], [90, 40, 55]]] },
+    'E': { w: 480, s: [[[90, 40, 42], [90, 520, 42]], [[90, 520, 55], [420, 520, 55]], [[90, 290, 50], [370, 290, 50]], [[90, 40, 55], [430, 40, 55]]] },
+    'F': { w: 460, s: [[[90, 40, 42], [90, 520, 42]], [[90, 520, 55], [420, 520, 55]], [[90, 290, 50], [350, 290, 50]]] },
+    'G': { w: 560, s: [[[480, 450, 45], [400, 520, 50], [220, 540, 55], [90, 430, 42], [80, 150, 42], [220, 30, 55], [400, 40, 50], [480, 120, 42], [480, 260, 42], [320, 260, 50]]] },
+    'H': { w: 560, s: [[[90, 40, 42], [90, 520, 42]], [[470, 40, 42], [470, 520, 42]], [[90, 290, 50], [470, 290, 50]]] },
+    'I': { w: 260, s: [[[130, 40, 42], [130, 520, 42]]] },
+    'J': { w: 420, s: [[[330, 520, 42], [330, 150, 42], [260, 40, 55], [130, 40, 55], [60, 120, 42]]] },
+    'K': { w: 520, s: [[[90, 40, 42], [90, 520, 42]], [[440, 520, 45], [100, 250, 45]], [[200, 320, 45], [460, 40, 45]]] },
+    'L': { w: 440, s: [[[90, 520, 42], [90, 40, 42], [410, 40, 55]]] },
+    'M': { w: 660, s: [[[80, 40, 42], [80, 520, 45], [330, 150, 50], [580, 520, 45], [580, 40, 42]]] },
+    'N': { w: 560, s: [[[90, 40, 42], [90, 520, 45], [470, 40, 45], [470, 520, 42]]] },
+    'O': { w: 580, s: [[[290, 540, 55], [110, 420, 42], [100, 150, 42], [290, 30, 55], [470, 150, 42], [480, 420, 42], [290, 540, 55]]] },
+    'P': { w: 500, s: [[[90, 40, 42], [90, 520, 42]], [[90, 520, 55], [330, 520, 55], [420, 440, 42], [420, 340, 42], [330, 270, 50], [90, 270, 50]]] },
+    'Q': { w: 580, s: [[[290, 540, 55], [110, 420, 42], [100, 150, 42], [290, 30, 55], [470, 150, 42], [480, 420, 42], [290, 540, 55]], [[380, 140, 42], [520, -30, 42]]] },
+    'R': { w: 520, s: [[[90, 40, 42], [90, 520, 42]], [[90, 520, 55], [330, 520, 55], [420, 440, 42], [420, 340, 42], [330, 270, 50], [90, 270, 50]], [[280, 270, 45], [470, 40, 45]]] },
+    'S': { w: 500, s: [[[430, 460, 45], [350, 530, 50], [170, 530, 50], [90, 440, 42], [110, 320, 42], [250, 280, 50], [390, 240, 50], [420, 120, 42], [340, 30, 50], [150, 30, 50], [70, 110, 45]]] },
+    'T': { w: 500, s: [[[50, 520, 55], [450, 520, 55]], [[250, 520, 42], [250, 40, 42]]] },
+    'U': { w: 560, s: [[[90, 520, 42], [90, 150, 42], [200, 30, 55], [360, 30, 55], [470, 150, 42], [470, 520, 42]]] },
+    'V': { w: 560, s: [[[60, 520, 42], [280, 40, 45], [500, 520, 42]]] },
+    'W': { w: 740, s: [[[50, 520, 42], [190, 40, 45], [370, 440, 45], [550, 40, 45], [690, 520, 42]]] },
+    'X': { w: 540, s: [[[70, 520, 45], [470, 40, 45]], [[470, 520, 45], [70, 40, 45]]] },
+    'Y': { w: 540, s: [[[60, 520, 42], [270, 270, 45], [480, 520, 42]], [[270, 270, 42], [270, 40, 42]]] },
+    'Z': { w: 500, s: [[[70, 520, 55], [430, 520, 55], [70, 40, 45], [440, 40, 55]]] },
+    // nikud (combining marks, centred in a 270-wide box)
+    'ָ': { w: 270, mark: 1, s: [[[60, -110, 40], [210, -110, 40]], [[135, -110, 36], [135, -230, 36]]] },
+    'ַ': { w: 270, mark: 1, s: [[[60, -120, 40], [210, -120, 40]]] },
+    'ִ': { w: 270, mark: 1, s: [[[135, -120, 42], [138, -122, 42]]] },
+    'ֶ': { w: 270, mark: 1, s: [[[70, -110, 36], [73, -112, 36]], [[200, -110, 36], [203, -112, 36]], [[135, -220, 36], [138, -222, 36]]] },
+    'ֵ': { w: 270, mark: 1, s: [[[70, -120, 38], [73, -122, 38]], [[200, -120, 38], [203, -122, 38]]] },
+    'ְ': { w: 270, mark: 1, s: [[[135, -110, 36], [138, -112, 36]], [[135, -230, 36], [138, -232, 36]]] },
+    'ֹ': { w: 270, mark: 1, s: [[[60, 650, 40], [63, 652, 40]]] },
+    'ֻ': { w: 270, mark: 1, s: [[[60, -100, 34], [63, -102, 34]], [[135, -170, 34], [138, -172, 34]], [[210, -240, 34], [213, -242, 34]]] },
+    'ּ': { w: 270, mark: 1, s: [[[135, 280, 40], [138, 282, 40]]] },
+    // punctuation
+    '.': { w: 190, s: [[[90, 55, 60], [95, 60, 60]]] },
+    ',': { w: 190, s: [[[100, 70, 55], [70, -90, 34]]] },
+    '-': { w: 310, s: [[[55, 260, 45], [255, 260, 45]]] },
+    '!': { w: 210, s: [[[100, 520, 52], [100, 220, 36]], [[100, 55, 58], [104, 58, 58]]] },
+    '?': { w: 400, s: [[[70, 440, 45], [170, 520, 50], [310, 480, 45], [330, 380, 42], [200, 280, 40], [200, 200, 36]], [[200, 55, 58], [204, 58, 58]]] },
+    "'": { w: 170, s: [[[90, 530, 45], [60, 390, 30]]] },
+    '"': { w: 290, s: [[[80, 530, 42], [60, 400, 30]], [[210, 530, 42], [190, 400, 30]]] },
+  };
+  const GROUPS = [
+    { id: 'heb', name: 'עברית', chars: [...'אבגדהוזחטיכךלמםנןסעףפץצקרשת'] },
+    { id: 'num', name: 'ספרות', chars: [...'0123456789'] },
+    { id: 'lat', name: 'לטינית', chars: [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'] },
+    { id: 'mark', name: 'ניקוד ופיסוק', chars: ['ָ', 'ַ', 'ִ', 'ֶ', 'ֵ', 'ְ', 'ֹ', 'ֻ', 'ּ', ...'.,-!?\'"'] },
+  ];
+  const CHARS = GROUPS.flatMap(g => g.chars);
+
+  function hash(x, y, seed) {
+    let h = (x * 374761393 + y * 668265263 + seed * 2147483647) | 0;
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    return ((h ^ (h >>> 16)) >>> 0) / 4294967295;
+  }
+  function vnoise(x, y, seed) {
+    const xi = Math.floor(x), yi = Math.floor(y);
+    const xf = x - xi, yf = y - yi;
+    const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+    const a = hash(xi, yi, seed), b = hash(xi + 1, yi, seed);
+    const c = hash(xi, yi + 1, seed), d = hash(xi + 1, yi + 1, seed);
+    return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+  }
+
+  // Catmull-Rom blended with polyline by tension. uniform>0 overrides node radius.
+  function sampleStroke(nodes, tension, mass, sub, uniform) {
+    const n = nodes.length;
+    const R = i => (uniform > 0 ? uniform : nodes[i][2] * mass);
+    if (n === 1) return [[nodes[0][0], nodes[0][1], R(0)]];
+    const out = [];
+    for (let i = 0; i < n - 1; i++) {
+      const p0 = nodes[Math.max(0, i - 1)], p1 = nodes[i], p2 = nodes[i + 1], p3 = nodes[Math.min(n - 1, i + 2)];
+      for (let k = 0; k < sub; k++) {
+        const t = k / sub, t2 = t * t, t3 = t2 * t;
+        const cr = (a, b, c, d) => 0.5 * ((2 * b) + (-a + c) * t + (2 * a - 5 * b + 4 * c - d) * t2 + (-a + 3 * b - 3 * c + d) * t3);
+        const lx = p1[0] + (p2[0] - p1[0]) * t, ly = p1[1] + (p2[1] - p1[1]) * t;
+        const x = lx + (cr(p0[0], p1[0], p2[0], p3[0]) - lx) * tension;
+        const y = ly + (cr(p0[1], p1[1], p2[1], p3[1]) - ly) * tension;
+        out.push([x, y, R(i) + (R(i + 1) - R(i)) * t]);
+      }
+    }
+    const last = nodes[n - 1];
+    out.push([last[0], last[1], R(n - 1)]);
+    return out;
+  }
+
+  // uneven capsule SDF (after Inigo Quilez)
+  function capsule(px, py, ax, ay, bx, by, ra, rb) {
+    px -= ax; py -= ay; bx -= ax; by -= ay;
+    const h = bx * bx + by * by;
+    const L = Math.sqrt(h);
+    const b = ra - rb;
+    if (L < 1e-6 || Math.abs(b) >= L) {
+      const da = Math.hypot(px, py) - ra, db = Math.hypot(px - bx, py - by) - rb;
+      return Math.min(da, db);
+    }
+    let qx = (px * by - py * bx) / h, qy = (px * bx + py * by) / h;
+    qx = Math.abs(qx);
+    const cx = Math.sqrt(h - b * b), cy = b;
+    const k = cx * qy - cy * qx;
+    const m = cx * qx + cy * qy;
+    const n = qx * qx + qy * qy;
+    if (k < 0) return Math.sqrt(h * n) - ra;
+    if (k > cx) return Math.sqrt(h * (n + 1 - 2 * qy)) - rb;
+    return m - ra;
+  }
+  // oriented box (flat caps): segment a-b with half-width r
+  function obox(px, py, ax, ay, bx, by, r) {
+    const cx = (ax + bx) / 2, cy = (ay + by) / 2;
+    let dx = bx - ax, dy = by - ay; const L = Math.hypot(dx, dy) || 1; dx /= L; dy /= L;
+    px -= cx; py -= cy;
+    let qx = Math.abs(px * dx + py * dy) - L / 2, qy = Math.abs(-px * dy + py * dx) - r;
+    const mx = Math.max(qx, 0), my = Math.max(qy, 0);
+    return Math.hypot(mx, my) + Math.min(Math.max(qx, qy), 0);
+  }
+
+  function buildSegments(glyph, P) {
+    const segs = [], joints = [];
+    const uni = P.mode === 'mono' ? P.width : 0;
+    for (const st of glyph.s) {
+      if (!st.length) continue;
+      const pts = sampleStroke(st, P.tension, P.mass, 5, uni);
+      if (pts.length === 1) { const p = pts[0]; segs.push([p[0], p[1], p[0], p[1], p[2], p[2]]); continue; }
+      for (let i = 0; i < pts.length - 1; i++) {
+        const a = pts[i], b = pts[i + 1];
+        segs.push([a[0], a[1], b[0], b[1], a[2], b[2]]);
+        if (i > 0) joints.push([a[0], a[1], a[2]]);
+      }
+    }
+    return { segs, joints };
+  }
+
+  function fieldContours(glyph, P, cell) {
+    const { segs, joints } = buildSegments(glyph, P);
+    if (!segs.length) return [];
+    const liquid = P.mode === 'liquid' || P.mode === 'stencil';
+    const melt = liquid ? P.melt : 0, wob = P.mode === 'liquid' ? P.wobble : 0;
+    const k = Math.max(0.0001, melt);
+    const flat = P.mode === 'mono' && P.caps === 'flat';
+    const pad = k * 0.5 + wob + cell * 2 + 4;
+    let minx = 1e9, miny = 1e9, maxx = -1e9, maxy = -1e9;
+    for (const s of segs) {
+      const r = Math.max(s[4], s[5]);
+      minx = Math.min(minx, s[0] - r, s[2] - r); maxx = Math.max(maxx, s[0] + r, s[2] + r);
+      miny = Math.min(miny, s[1] - r, s[3] - r); maxy = Math.max(maxy, s[1] + r, s[3] + r);
+    }
+    minx -= pad; miny -= pad; maxx += pad; maxy += pad;
+    const nx = Math.ceil((maxx - minx) / cell) + 1, ny = Math.ceil((maxy - miny) / cell) + 1;
+    const f = new Float32Array(nx * ny);
+    const freq = 1 / 70, seed = P.seed | 0;
+    const ns = segs.length, nj = joints.length;
+    const ca = Math.cos(P.cutAngle * Math.PI / 180), sa = Math.sin(P.cutAngle * Math.PI / 180);
+    const gap = Math.max(20, P.cutGap), cw = P.cutW;
+    for (let j = 0; j < ny; j++) {
+      const y = miny + j * cell;
+      for (let i = 0; i < nx; i++) {
+        const x = minx + i * cell;
+        let d = 1e9;
+        for (let s = 0; s < ns; s++) {
+          const g = segs[s];
+          const e = flat ? obox(x, y, g[0], g[1], g[2], g[3], g[4]) : capsule(x, y, g[0], g[1], g[2], g[3], g[4], g[5]);
+          if (melt <= 0.5) { if (e < d) d = e; continue; }
+          const h = Math.max(k - Math.abs(d - e), 0) / k;
+          d = Math.min(d, e) - h * h * k * 0.25;
+        }
+        if (flat) for (let s = 0; s < nj; s++) { const jn = joints[s]; const e = Math.hypot(x - jn[0], y - jn[1]) - jn[2]; if (e < d) d = e; }
+        if (wob > 0) d += wob * (vnoise(x * freq + 13.1, y * freq - 7.7, seed) * 2 - 1 + 0.5 * (vnoise(x * freq * 2.3, y * freq * 2.3, seed + 9) * 2 - 1));
+        if (P.mode === 'stencil') {
+          const u = x * ca + y * sa;
+          const m = ((u % gap) + gap) % gap;
+          const sd = Math.abs(m - gap / 2) - cw / 2; // <0 inside a cut stripe
+          d = Math.max(d, -sd);
+        }
+        if (i === 0 || j === 0 || i === nx - 1 || j === ny - 1) d = Math.max(d, 1);
+        f[j * nx + i] = d;
+      }
+    }
+    return march(f, nx, ny, minx, miny, cell, P.mode === 'mono' ? 1 : P.smooth);
+  }
+
+  function march(f, nx, ny, ox, oy, cell, smooth) {
+    const pos = new Map(), adj = new Map();
+    const V = (i, j) => f[j * nx + i];
+    function pt(id) {
+      if (pos.has(id)) return id;
+      const base = id >> 1, i = base % nx, j = (base / nx) | 0;
+      const a = V(i, j);
+      let x, y;
+      if ((id & 1) === 0) { const b = V(i + 1, j), t = a / (a - b); x = ox + (i + t) * cell; y = oy + j * cell; }
+      else { const b = V(i, j + 1), t = a / (a - b); x = ox + i * cell; y = oy + (j + t) * cell; }
+      pos.set(id, [x, y]);
+      return id;
+    }
+    function link(e1, e2) {
+      pt(e1); pt(e2);
+      if (!adj.has(e1)) adj.set(e1, []);
+      if (!adj.has(e2)) adj.set(e2, []);
+      adj.get(e1).push(e2); adj.get(e2).push(e1);
+    }
+    for (let j = 0; j < ny - 1; j++) {
+      for (let i = 0; i < nx - 1; i++) {
+        const a = V(i, j), b = V(i + 1, j), c = V(i + 1, j + 1), d = V(i, j + 1);
+        const idx = (a < 0 ? 1 : 0) | (b < 0 ? 2 : 0) | (c < 0 ? 4 : 0) | (d < 0 ? 8 : 0);
+        if (idx === 0 || idx === 15) continue;
+        const e0 = 2 * (j * nx + i), e1 = 2 * (j * nx + i + 1) + 1, e2 = 2 * ((j + 1) * nx + i), e3 = 2 * (j * nx + i) + 1;
+        switch (idx) {
+          case 1: case 14: link(e3, e0); break;
+          case 2: case 13: link(e0, e1); break;
+          case 3: case 12: link(e3, e1); break;
+          case 4: case 11: link(e1, e2); break;
+          case 6: case 9: link(e0, e2); break;
+          case 7: case 8: link(e3, e2); break;
+          case 5: { const ctr = (a + b + c + d) / 4; if (ctr < 0) { link(e0, e1); link(e2, e3); } else { link(e3, e0); link(e1, e2); } break; }
+          case 10: { const ctr = (a + b + c + d) / 4; if (ctr < 0) { link(e3, e0); link(e1, e2); } else { link(e0, e1); link(e2, e3); } break; }
+        }
+      }
+    }
+    const seen = new Set(), loops = [];
+    for (const start of adj.keys()) {
+      if (seen.has(start)) continue;
+      const loop = [];
+      let prev = -1, cur = start;
+      while (cur !== undefined && !seen.has(cur)) {
+        seen.add(cur);
+        loop.push(pos.get(cur));
+        const nb = adj.get(cur);
+        const nxt = nb[0] !== prev ? nb[0] : nb[1];
+        prev = cur; cur = nxt;
+      }
+      if (loop.length >= 3) loops.push(loop);
+    }
+    let out = loops.map(l => { let p = l; for (let s = 0; s < smooth; s++) p = chaikin(p); return p; });
+    out = out.filter(l => Math.abs(area(l)) > cell * cell * 1.5);
+    return orient(out);
+  }
+  function orient(out) {
+    for (let a = 0; a < out.length; a++) {
+      let depth = 0;
+      const p = out[a][0];
+      for (let b = 0; b < out.length; b++) if (a !== b && inside(p, out[b])) depth++;
+      const ar = area(out[a]);
+      if ((ar > 0) !== (depth % 2 === 0)) out[a].reverse();
+    }
+    return out;
+  }
+
+  // Pixel mode: rasterize field on a coarse grid, trace the block outline.
+  function pixelContours(glyph, P) {
+    const { segs } = buildSegments(glyph, P);
+    if (!segs.length) return [];
+    const px = Math.max(8, P.px);
+    let minx = 1e9, miny = 1e9, maxx = -1e9, maxy = -1e9;
+    for (const s of segs) {
+      const r = Math.max(s[4], s[5]);
+      minx = Math.min(minx, s[0] - r, s[2] - r); maxx = Math.max(maxx, s[0] + r, s[2] + r);
+      miny = Math.min(miny, s[1] - r, s[3] - r); maxy = Math.max(maxy, s[1] + r, s[3] + r);
+    }
+    const ox = Math.floor(minx / px) * px - px, oy = Math.floor(miny / px) * px - px;
+    const nx = Math.ceil((maxx - ox) / px) + 2, ny = Math.ceil((maxy - oy) / px) + 2;
+    const ins = new Uint8Array(nx * ny);
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+      const x = ox + (i + .5) * px, y = oy + (j + .5) * px;
+      let d = 1e9;
+      for (const g of segs) { const e = capsule(x, y, g[0], g[1], g[2], g[3], g[4], g[5]); if (e < d) d = e; }
+      ins[j * nx + i] = d < 0 ? 1 : 0;
+    }
+    const I = (i, j) => (i < 0 || j < 0 || i >= nx || j >= ny) ? 0 : ins[j * nx + i];
+    const W = nx + 1, edges = new Map(); // start corner id -> [end corner ids]
+    const add = (a, b) => { if (!edges.has(a)) edges.set(a, []); edges.get(a).push(b); };
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+      if (!ins[j * nx + i]) continue;
+      const bl = j * W + i, br = bl + 1, tl = bl + W, tr = tl + 1;
+      if (!I(i, j - 1)) add(bl, br);
+      if (!I(i + 1, j)) add(br, tr);
+      if (!I(i, j + 1)) add(tr, tl);
+      if (!I(i - 1, j)) add(tl, bl);
+    }
+    const loops = [];
+    for (const [start, ends] of edges) {
+      while (ends.length) {
+        const loop = [start];
+        let cur = ends.pop();
+        let guard = 0;
+        while (cur !== start && guard++ < 100000) {
+          loop.push(cur);
+          const e = edges.get(cur);
+          if (!e || !e.length) break;
+          cur = e.pop();
+        }
+        if (loop.length >= 4) loops.push(loop.map(id => [ox + (id % W) * px, oy + ((id / W) | 0) * px]));
+      }
+    }
+    let out = loops.map(l => {
+      // drop collinear points
+      const r = [];
+      for (let i = 0; i < l.length; i++) {
+        const a = l[(i + l.length - 1) % l.length], b = l[i], c = l[(i + 1) % l.length];
+        if ((a[0] === b[0] && b[0] === c[0]) || (a[1] === b[1] && b[1] === c[1])) continue;
+        r.push(b);
+      }
+      let p = r;
+      for (let s = 0; s < P.round; s++) p = chaikin(p);
+      return p;
+    }).filter(l => l.length >= 3);
+    return orient(out);
+  }
+
+  function glyphContours(glyph, P, cell) {
+    return P.mode === 'pixel' ? pixelContours(glyph, P) : fieldContours(glyph, P, cell);
+  }
+  function chaikin(p) {
+    const o = [], n = p.length;
+    for (let i = 0; i < n; i++) {
+      const a = p[i], b = p[(i + 1) % n];
+      o.push([a[0] * 0.75 + b[0] * 0.25, a[1] * 0.75 + b[1] * 0.25]);
+      o.push([a[0] * 0.25 + b[0] * 0.75, a[1] * 0.25 + b[1] * 0.75]);
+    }
+    return o;
+  }
+  function area(p) { let s = 0; for (let i = 0, n = p.length; i < n; i++) { const a = p[i], b = p[(i + 1) % n]; s += a[0] * b[1] - b[0] * a[1]; } return s / 2; }
+  function inside(pt, poly) {
+    let c = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const a = poly[i], b = poly[j];
+      if ((a[1] > pt[1]) !== (b[1] > pt[1]) && pt[0] < (b[0] - a[0]) * (pt[1] - a[1]) / (b[1] - a[1]) + a[0]) c = !c;
+    }
+    return c;
+  }
+  function simplify(pts, eps) {
+    if (pts.length < 8) return pts;
+    let far = 0, fd = -1;
+    for (let i = 1; i < pts.length; i++) { const d = (pts[i][0] - pts[0][0]) ** 2 + (pts[i][1] - pts[0][1]) ** 2; if (d > fd) { fd = d; far = i; } }
+    const rdp = (arr) => {
+      if (arr.length < 3) return arr;
+      const a = arr[0], b = arr[arr.length - 1];
+      let idx = 0, md = 0;
+      const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy) || 1;
+      for (let i = 1; i < arr.length - 1; i++) {
+        const d = Math.abs(dy * arr[i][0] - dx * arr[i][1] + b[0] * a[1] - b[1] * a[0]) / L;
+        if (d > md) { md = d; idx = i; }
+      }
+      if (md <= eps) return [a, b];
+      const l = rdp(arr.slice(0, idx + 1)), r = rdp(arr.slice(idx));
+      return l.slice(0, -1).concat(r);
+    };
+    const A = rdp(pts.slice(0, far + 1)), B = rdp(pts.slice(far).concat([pts[0]]));
+    return A.slice(0, -1).concat(B.slice(0, -1));
+  }
+
+  root.Nozli = { BASE, GROUPS, CHARS, glyphContours, sampleStroke, simplify, area, hash };
+})(window);
+</script>
+<script>
+(function(){
+'use strict';
+const N = window.Nozli;
+const $ = id => document.getElementById(id);
+const clone = o => JSON.parse(JSON.stringify(o));
+const clamp = (v,a,b) => Math.min(b, Math.max(a, v));
+
+// ---------- colour helpers
+function hexToRgb(h){ h = h.replace('#',''); if(h.length===3) h = h.split('').map(c=>c+c).join(''); const n = parseInt(h,16); return [(n>>16)&255,(n>>8)&255,n&255]; }
+function rgbToHex(r,g,b){ return '#' + [r,g,b].map(v => clamp(Math.round(v),0,255).toString(16).padStart(2,'0')).join(''); }
+function mix(a, b, t){ const A = hexToRgb(a), B = hexToRgb(b); return rgbToHex(A[0]+(B[0]-A[0])*t, A[1]+(B[1]-A[1])*t, A[2]+(B[2]-A[2])*t); }
+const darken = (c,t) => mix(c,'#000000',t), lighten = (c,t) => mix(c,'#ffffff',t);
+function hsl(h,s,l){ h=((h%360)+360)%360; s/=100; l/=100; const k=n=>(n+h/30)%12, a=s*Math.min(l,1-l), f=n=>l-a*Math.max(-1,Math.min(k(n)-3,9-k(n),1)); return rgbToHex(f(0)*255,f(8)*255,f(4)*255); }
+function hue(c){ const [r,g,b] = hexToRgb(c).map(v=>v/255); const M=Math.max(r,g,b), m=Math.min(r,g,b); if(M===m) return 0; let h; if(M===r) h=(g-b)/(M-m)%6; else if(M===g) h=(b-r)/(M-m)+2; else h=(r-g)/(M-m)+4; return ((h*60)+360)%360; }
+function lum(c){ const [r,g,b] = hexToRgb(c); return (r*.299+g*.587+b*.114)/255; }
+
+// ---------- definitions
+const SHAPES = {
+  liquid: { name:'נוזלי', sl:[['mass','מסה',.5,1.8,.01],['melt','התכה',0,160,1],['tension','מתח',0,1,.01],['wobble','רעידה',0,28,.5],['smooth','החלקה',0,3,1]] },
+  mono:   { name:'מונו-ליין', sl:[['width','עובי',10,90,1],['tension','מתח',0,1,.01]] },
+  pixel:  { name:'פיקסלים', sl:[['px','פיקסל',18,90,2],['mass','מסה',.5,1.8,.01],['tension','מתח',0,1,.01],['round','עיגול',0,2,1]] },
+  stencil:{ name:'סטנסיל', sl:[['mass','מסה',.5,1.8,.01],['melt','התכה',0,60,1],['tension','מתח',0,1,.01],['cutAngle','זווית חיתוך',0,180,5],['cutGap','מרווח',40,220,5],['cutW','רוחב חיתוך',6,44,1]] },
+};
+const SHAPE0 = { mode:'liquid', mass:1, melt:35, tension:.55, wobble:0, smooth:2, width:40, caps:'round', px:44, round:0, cutAngle:0, cutGap:110, cutW:22, seed:5 };
+const FX = {
+  threeD:    { name:'תלת-ממד',  sl:[['depth','עומק',5,140,1],['angle','זווית',0,360,5]],                      d:{depth:60, angle:45} },
+  longShadow:{ name:'צל ארוך',  sl:[['len','אורך',.1,3,.05],['angle','זווית',0,360,5],['fade','דהייה',0,1,.05]], d:{len:1.5, angle:45, fade:.3} },
+  sticker:   { name:'מדבקה',    sl:[['border','מסגרת',6,70,1]],                                              d:{border:22} },
+  outline:   { name:'אאוטליין', sl:[['layers','שכבות',1,4,1],['gap','מרווח',3,44,1],['offX','הזזה X',-50,50,1],['offY','הזזה Y',-50,50,1]], d:{layers:2, gap:14, offX:0, offY:0} },
+  gradient:  { name:'גרדיאנט',  sl:[['type','סוג',0,2,1]], names:['שני צבעים','כרום','זהב'],                 d:{type:0} },
+  shine:     { name:'ברק רטוב', sl:[['amount','עוצמה',.2,1.6,.05]],                                          d:{amount:1} },
+  glow:      { name:'זוהר',     sl:[['size','גודל',10,200,2]],                                               d:{size:60} },
+  hatch:     { name:'קווקו',    sl:[['angle','זווית',0,180,5],['gap','מרווח',16,120,2],['thick','עובי קו',2,24,1]], d:{angle:45, gap:34, thick:4} },
+  sketch:    { name:'סקיצה',    sl:[['jitter','רעד',0,30,1],['passes','מעברים',1,4,1]],                     d:{jitter:8, passes:3} },
+  neon:      { name:'ניאון',    sl:[['tube','צינור',10,90,1],['broken','צינורות שבורים',0,1,.05]],           d:{tube:34, broken:.15} },
+  grunge:    { name:'לכלוך',    sl:[['amount','כמות',0,1,.05],['grain','גרעיניות',1,4,.5]],                 d:{amount:.7, grain:1.5} },
+};
+const FXORDER = Object.keys(FX);
+const LAYOUT = [['spacing','ריווח',-80,200,5],['slant','הטיה',-30,30,1],['mix','ערבוב עובי',0,1,.05]];
+
+const PRESETS = {
+  bubblegum: { name:'מסטיק',     sw:'#FF5FA2', shape:{mode:'liquid',mass:1.5,melt:130,tension:.9,wobble:4,smooth:3}, col:{fill:'#FF5FA2',bg:'#FFE3EF',accent:'#FFFFFF'}, fx:{sticker:{border:30}, shine:{amount:1.3}}, spacing:-40 },
+  graffiti:  { name:'גרפיטי',    sw:'linear-gradient(135deg,#C6FF3D,#19E0C8)', shape:{mode:'liquid',mass:1.35,melt:70,tension:.8,wobble:9,smooth:2}, col:{fill:'#C6FF3D',bg:'#2A2530',accent:'#111111',mode:'flow'}, fx:{outline:{layers:1,gap:10,offX:0,offY:0}, threeD:{depth:45,angle:60}, shine:{amount:.7}}, slant:-10, mix:.45 },
+  arcade:    { name:'ארקייד',    sw:'#FFE14D', shape:{mode:'pixel',px:40,mass:1.2,tension:.5,round:0}, col:{fill:'#FFE14D',bg:'#241046',accent:'#FF3D7F'}, fx:{threeD:{depth:50,angle:50}, glow:{size:40}} },
+  gold:      { name:'זהב רטוב',  sw:'linear-gradient(160deg,#FFF3B0,#F5C542,#8A5A00)', shape:{mode:'liquid',mass:1.2,melt:75,tension:.85,wobble:2,smooth:3}, col:{fill:'#F5C542',bg:'#0E0C08',accent:'#F5C542'}, fx:{gradient:{type:2}, shine:{amount:1.1}, glow:{size:50}} },
+  comic:     { name:'קומיקס',    sw:'#E8262B', shape:{mode:'mono',width:58,tension:.65,caps:'round'}, col:{fill:'#E8262B',bg:'#FFD83D',accent:'#161616'}, fx:{outline:{layers:1,gap:9,offX:0,offY:0}, threeD:{depth:36,angle:40}}, slant:-6 },
+  groovy:    { name:'שנות ה-70', sw:'#E0602A', shape:{mode:'liquid',mass:1.45,melt:110,tension:.95,wobble:0,smooth:3}, col:{fill:'#7A3B1D',bg:'#F6E7C8',accent:'#E0602A'}, fx:{outline:{layers:3,gap:11,offX:0,offY:0}}, spacing:-30 },
+  ice:       { name:'קרח',       sw:'linear-gradient(180deg,#FFFFFF,#9FE8FF)', shape:{mode:'liquid',mass:1.05,melt:30,tension:.95,wobble:1,smooth:3}, col:{fill:'#FFFFFF',bg:'#0B1B3A',accent:'#6FD8FF'}, fx:{gradient:{type:0}, glow:{size:70}, shine:{amount:.9}} },
+  army:      { name:'צבאי',      sw:'#4B5320', shape:{mode:'stencil',mass:1.25,melt:0,tension:.2,cutAngle:90,cutGap:150,cutW:26}, col:{fill:'#E9E3C9',bg:'#4B5320',accent:'#E9E3C9'}, fx:{grunge:{amount:.8,grain:2}}, spacing:20 },
+  blueprint: { name:'שרטוט',     sw:'#1E4FD8', shape:{mode:'mono',width:26,tension:.3,caps:'flat'}, col:{fill:'#EAF1FF',bg:'#1E4FD8',accent:'#8DB2FF'}, fx:{sketch:{jitter:4,passes:2}, longShadow:{len:.35,angle:45,fade:.6}}, spacing:40 },
+  jelly:     { name:'ג\'לי',     sw:'linear-gradient(90deg,#FF4D6D,#FFB84D,#4DD9FF,#B04DFF)', shape:{mode:'liquid',mass:1.3,melt:160,tension:1,wobble:18,smooth:3}, col:{fill:'#FF4D6D',bg:'#FFF8EC',accent:'#FFFFFF',mode:'rainbow'}, fx:{shine:{amount:1.5}} },
+  ink:       { name:'דיו',       sw:'#121412', shape:{mode:'liquid',mass:1,melt:35,tension:.55,wobble:0,smooth:2}, col:{fill:'#121412',bg:'#EDEEE8',accent:'#2B37F0'}, fx:{} },
+  mercury:   { name:'כספית',     sw:'linear-gradient(160deg,#565C64,#F4F6F8,#7E858E)', shape:{mode:'liquid',mass:1.1,melt:60,tension:.75,wobble:3,smooth:3}, col:{fill:'#C9CED4',bg:'#15171B',accent:'#F4F6F8'}, fx:{gradient:{type:1}, shine:{amount:1}} },
+  lava:      { name:'לבה',       sw:'linear-gradient(160deg,#FFE27A,#FF7A1A,#C22A0E)', shape:{mode:'liquid',mass:1.2,melt:80,tension:.85,wobble:6,smooth:3}, col:{fill:'#FF7A1A',bg:'#170905',accent:'#FFE27A'}, fx:{gradient:{type:0}, glow:{size:70}, shine:{amount:.8}} },
+  goo:       { name:'ריר',       sw:'#5DBB3F', shape:{mode:'liquid',mass:1.15,melt:115,tension:.9,wobble:14,smooth:3}, col:{fill:'#5DBB3F',bg:'#ECE6D6',accent:'#C9F79E'}, fx:{shine:{amount:1.2}} },
+  mono:      { name:'מונו-ליין', sw:'#1B1B1B', shape:{mode:'mono',width:40,tension:.6,caps:'round'}, col:{fill:'#1B1B1B',bg:'#F4EFE6',accent:'#D9482B'}, fx:{} },
+  pixel:     { name:'פיקסלים',   sw:'#3DF07A', shape:{mode:'pixel',px:44,mass:1,tension:.4,round:0}, col:{fill:'#3DF07A',bg:'#0B0F0C',accent:'#1F7A3C'}, fx:{} },
+  stencil:   { name:'סטנסיל',    sw:'#B3261E', shape:{mode:'stencil',mass:1.1,melt:10,tension:.5,cutAngle:0,cutGap:110,cutW:22}, col:{fill:'#1C1C1C',bg:'#D9C9A3',accent:'#B3261E'}, fx:{} },
+  threeD:    { name:'תלת-ממד',   sw:'#FFD400', shape:{mode:'liquid',mass:1.05,melt:20,tension:.6,wobble:0,smooth:2}, col:{fill:'#FFD400',bg:'#1E1E28',accent:'#FF5A1F'}, fx:{threeD:{depth:60,angle:45}} },
+  neon:      { name:'ניאון',     sw:'#FF2E9A', shape:{mode:'mono',width:22,tension:.7,caps:'round'}, col:{fill:'#FF2E9A',bg:'#0C0A14',accent:'#2EE6FF',fillOn:false}, fx:{neon:{tube:34,broken:.15}} },
+  outline:   { name:'אאוטליין',  sw:'radial-gradient(circle,#FFFFFF 38%,#141414 42%,#141414 60%,#FFFFFF 64%)', shape:{mode:'liquid',mass:1,melt:30,tension:.6,wobble:0,smooth:2}, col:{fill:'#FFFFFF',bg:'#FFFFFF',accent:'#141414'}, fx:{outline:{layers:3,gap:16,offX:0,offY:0}} },
+  sketch:    { name:'סקיצה',     sw:'#FBF7EE', shape:{mode:'liquid',mass:1,melt:10,tension:.5,wobble:0,smooth:1}, col:{fill:'#2B2B2B',bg:'#FBF7EE',accent:'#2B2B2B',fillOn:false}, fx:{sketch:{jitter:8,passes:3}, hatch:{angle:45,gap:34,thick:3}} },
+  grunge:    { name:'לכלוך',     sw:'#8A1C1C', shape:{mode:'liquid',mass:1.1,melt:25,tension:.5,wobble:0,smooth:1}, col:{fill:'#1B1B1B',bg:'#E9E2D0',accent:'#8A1C1C'}, fx:{grunge:{amount:.75,grain:1.5}} },
+  sticker:   { name:'מדבקה',     sw:'#FF6B3D', shape:{mode:'liquid',mass:1.1,melt:40,tension:.7,wobble:0,smooth:2}, col:{fill:'#FF6B3D',bg:'#7BD1FF',accent:'#FFFFFF'}, fx:{sticker:{border:22}} },
+  chrome:    { name:'כרום',      sw:'linear-gradient(180deg,#F2F5F8,#8C97A6,#2A2F36,#C9D1DA)', shape:{mode:'mono',width:62,tension:.7,caps:'round'}, col:{fill:'#B8C0CC',bg:'#161616',accent:'#2A2F36'}, fx:{gradient:{type:1}, outline:{layers:1,gap:6,offX:0,offY:0}} },
+  longshadow:{ name:'צל ארוך',   sw:'#2F6BFF', shape:{mode:'liquid',mass:1,melt:30,tension:.6,wobble:0,smooth:2}, col:{fill:'#FFFFFF',bg:'#2F6BFF',accent:'#1E46B8'}, fx:{longShadow:{len:1.6,angle:45,fade:.3}} },
+};
+
+// ---------- state
+function freshFx(){ const o = {}; for(const k of FXORDER) o[k] = Object.assign({on:false}, FX[k].d); return o; }
+let S = { preset:'ink', shape:Object.assign({}, SHAPE0), col:{fill:'#121412',bg:'#EDEEE8',accent:'#2B37F0',fillOn:true,mode:'one'}, fx:freshFx(),
+  text:'אותיות חיות', spacing:0, slant:0, mix:0, fontName:'TzurFont', transp:false, glyphs:clone(N.BASE), styles:[], offs:{}, savedAt:0 };
+const ver = {};
+let cur = 'א', sel = null, group = 'heb';
+const undoStack = [];
+
+function applyPreset(key, P){
+  P = P || PRESETS[key];
+  S.preset = key;
+  S.shape = Object.assign({}, SHAPE0, {seed:S.shape.seed}, P.shape);
+  S.col = Object.assign({fillOn:true, mode:'one'}, P.col);
+  S.fx = freshFx();
+  for(const [k,v] of Object.entries(P.fx||{})) if(S.fx[k]) Object.assign(S.fx[k], v, {on: v.on === undefined ? true : !!v.on});
+  S.spacing = P.spacing||0; S.slant = P.slant||0; S.mix = P.mix||0;
+}
+function styleOf(){ return { shape:clone(S.shape), col:clone(S.col), fx:clone(S.fx), spacing:S.spacing, slant:S.slant, mix:S.mix }; }
+
+// ---------- contour cache
+const cache = new Map();
+function shapeKey(mass){ const p = S.shape; return [p.mode, mass, p.melt, p.tension, p.wobble, p.smooth, p.width, p.caps, p.px, p.round, p.cutAngle, p.cutGap, p.cutW, p.seed].join(','); }
+function contours(ch, cell, mass){
+  const g = S.glyphs[ch]; if(!g) return null;
+  mass = mass === undefined ? S.shape.mass : mass;
+  const key = ch+'|'+(ver[ch]||0)+'|'+cell+'|'+shapeKey(mass);
+  let c = cache.get(key);
+  if(!c){ if(cache.size>1200) cache.clear(); c = N.glyphContours(g, Object.assign({}, S.shape, {mass}), cell); cache.set(key, c); }
+  return c;
+}
+function pathOf(cs, ox, oy, s, k){
+  k = k||0; const p = new Path2D();
+  for(const l of cs){ p.moveTo(ox+(l[0][0]+l[0][1]*k)*s, oy-l[0][1]*s); for(let i=1;i<l.length;i++) p.lineTo(ox+(l[i][0]+l[i][1]*k)*s, oy-l[i][1]*s); p.closePath(); }
+  return p;
+}
+const adv = ch => { const g = S.glyphs[ch]; return g ? (g.mark ? 0 : g.w) : (ch === ' ' ? 280 : 0); };
+const isLTR = ch => /[0-9A-Za-z]/.test(ch);
+
+// ---------- layout (RTL with LTR runs, combining marks)
+function tokens(line){
+  const t = [];
+  for(let ch of line){
+    if(/[a-z]/.test(ch)) ch = ch.toUpperCase();
+    const g = S.glyphs[ch];
+    if(g && g.mark && t.length){ t[t.length-1].marks.push(ch); continue; }
+    t.push({ch, marks:[]});
+  }
+  // simple bidi: paragraph direction from the first strong letter, neutrals (spaces, punctuation)
+  // take the direction of their neighbours when both agree, otherwise the paragraph's
+  const dirOf = ch => isLTR(ch) ? 'L' : (/[\u0590-\u05FF]/.test(ch) ? 'R' : 'N');
+  const d = t.map(k => dirOf(k.ch));
+  const para = d.find(x => x !== 'N') || 'R';
+  for(let i = 0; i < d.length; i++){
+    if(d[i] !== 'N') continue;
+    let a = i-1; while(a >= 0 && d[a] === 'N') a--;
+    let b = i+1; while(b < d.length && d[b] === 'N') b++;
+    const L = a >= 0 ? dirOf(t[a].ch) : para, R = b < d.length ? dirOf(t[b].ch) : para;
+    d[i] = (L === R) ? L : para;
+  }
+  // the layout places tokens right-to-left: reverse runs that run against the paragraph
+  const other = para === 'R' ? 'L' : 'R';
+  const seq = []; let run = [];
+  const flush = () => { if(run.length){ seq.push(...run.reverse()); run = []; } };
+  t.forEach((k, i) => { if(d[i] === other) run.push(k); else { flush(); seq.push(k); } });
+  flush();
+  return para === 'R' ? seq : seq.reverse();
+}
+function layout(W, H){
+  const lines = (S.text||' ').split('\n').slice(0,8).map(tokens);
+  const sp = S.spacing;
+  const widths = lines.map(l => Math.max(1, l.reduce((a,k)=>a+adv(k.ch)+sp,0) - sp));
+  const maxW = Math.max(...widths);
+  const LH = 1180;
+  const padX = W*0.06, padTop = H*0.08, padBot = H*0.2;
+  const s = Math.min((W-2*padX)/maxW, (H-padTop-padBot)/(lines.length*LH), 0.4);
+  const totalH = lines.length*LH*s;
+  const top = padTop + ((H-padTop-padBot) - totalH)/2;
+  const k = Math.tan(S.slant*Math.PI/180);
+  const items = []; let idx = 0;
+  lines.forEach((line, li) => {
+    let x = W/2 + widths[li]*s/2;
+    const base = top + (li*LH + 860)*s;
+    for(const tk of line){
+      const a = adv(tk.ch); x -= a*s;
+      const off = S.offs[idx], ox = off ? off[0]*s : 0, oy = off ? off[1]*s : 0;
+      if(S.glyphs[tk.ch]){
+        const mass = S.shape.mass * (1 + (S.mix||0) * (N.hash(idx, 7, S.shape.seed) - .5) * .9);
+        items.push({ch:tk.ch, x:x+ox, base:base-oy, mass, i:idx, w:a});
+      }
+      for(const m of tk.marks) items.push({ch:m, x: x + ox + (a-270)*s/2, base:base-oy, mass:S.shape.mass, i:idx, mark:true});
+      idx++; x -= sp*s;
+    }
+  });
+  return {items, s, k, n:idx};
+}
+
+// ---------- painting
+let offC = null;
+function getOff(W,H,dpr){ if(!offC) offC = document.createElement('canvas'); if(offC.width!==W*dpr||offC.height!==H*dpr){ offC.width=W*dpr; offC.height=H*dpr; } return offC; }
+let grungePat = null;
+function grungePattern(ctx, grain){
+  if(grungePat && grungePat.g === grain) return grungePat.p;
+  const c = document.createElement('canvas'); c.width = c.height = 320; const g = c.getContext('2d');
+  let n = 1400; for(let i=0;i<n;i++){ const x = N.hash(i,1,3)*320, y = N.hash(i,2,3)*320, r = (N.hash(i,3,3)**3)*2.4*grain+.3, a = .3+N.hash(i,4,3)*.6;
+    g.fillStyle = `rgba(0,0,0,${a})`; g.beginPath(); g.ellipse(x,y,r, r*(0.4+N.hash(i,5,3)), N.hash(i,6,3)*3.14, 0, 6.29); g.fill(); }
+  for(let i=0;i<90;i++){ const x = N.hash(i,7,3)*320, y = N.hash(i,8,3)*320; g.strokeStyle='rgba(0,0,0,.5)'; g.lineWidth=.5+N.hash(i,9,3)*.9*grain; g.beginPath(); g.moveTo(x,y); g.lineTo(x+(N.hash(i,10,3)-.5)*40, y+(N.hash(i,11,3)-.5)*40); g.stroke(); }
+  grungePat = {g:grain, p:ctx.createPattern(c,'repeat')}; return grungePat.p;
+}
+const tr = (path, dx, dy) => { const p = new Path2D(); p.addPath(path, new DOMMatrix().translateSelf(dx,dy)); return p; };
+function letterColor(it, n){
+  const C = S.col;
+  switch(C.mode){
+    case 'alt': return it.i % 2 ? C.accent : C.fill;
+    case 'flow': return mix(C.fill, C.accent, n > 1 ? it.i/(n-1) : 0);
+    case 'rainbow': return hsl(hue(C.fill) + (n ? it.i*360/Math.max(n,1) : 0), 85, lum(C.fill) > .6 ? 62 : 48);
+    case 'random': return hsl(N.hash(it.i, 3, S.shape.seed)*360, 80, 52);
+    default: return C.fill;
+  }
+}
+function render(ctx, W, H, dpr, cell, transparent){
+  const L = layout(W, H), s = L.s, k = L.k, C = S.col, F = S.fx;
+  const em = 1000*s;
+  for(const it of L.items){ it.cs = contours(it.ch, cell, it.mark ? S.shape.mass : it.mass); it.path = pathOf(it.cs, it.x, it.base, s, k); }
+  const whole = new Path2D(); for(const it of L.items) whole.addPath(it.path);
+  if(!transparent){ ctx.fillStyle = C.bg; ctx.fillRect(0,0,W,H); } else ctx.clearRect(0,0,W,H);
+  const off = getOff(W,H,dpr), o = off.getContext('2d');
+  o.setTransform(dpr,0,0,dpr,0,0); o.clearRect(0,0,W,H);
+  o.lineJoin = 'round'; o.lineCap = 'round';
+  const rad = a => a*Math.PI/180;
+  // long shadow
+  if(F.longShadow.on){
+    const len = F.longShadow.len*em, dx = Math.cos(rad(F.longShadow.angle)), dy = Math.sin(rad(F.longShadow.angle));
+    const step = Math.max(1.2, len/160), n = Math.ceil(len/step);
+    for(let i=n;i>=1;i--){ const t = i/n; o.globalAlpha = 1 - F.longShadow.fade*t; o.fillStyle = C.accent; o.fill(tr(whole, dx*step*i, dy*step*i)); }
+    o.globalAlpha = 1;
+  }
+  // 3D
+  if(F.threeD.on){
+    const d = F.threeD.depth*s*1.2, dx = Math.cos(rad(F.threeD.angle)), dy = Math.sin(rad(F.threeD.angle));
+    const n = clamp(Math.ceil(d/1.1), 4, 90), side = darken(C.fill,.42), edge = darken(C.fill,.7);
+    for(let i=n;i>=1;i--){ const t = i/n; o.fillStyle = mix(side, edge, t*.6); o.fill(tr(whole, dx*d*t, dy*d*t)); }
+  }
+  // sticker
+  if(F.sticker.on){
+    o.save(); o.lineWidth = F.sticker.border*s*2; o.strokeStyle = C.accent; o.shadowColor = 'rgba(0,0,0,.32)'; o.shadowBlur = 14*s*3; o.shadowOffsetY = 6*s*3;
+    o.stroke(whole); o.restore(); o.strokeStyle = C.accent; o.lineWidth = F.sticker.border*s*2; o.stroke(whole);
+  }
+  // outline
+  if(F.outline.on){
+    const n = F.outline.layers|0, gap = F.outline.gap*s*2, ox = F.outline.offX*s*2, oy = F.outline.offY*s*2;
+    for(let i=n;i>=1;i--){ o.lineWidth = gap*2*i; o.strokeStyle = i%2 ? C.accent : C.bg; o.stroke(tr(whole, ox*i, oy*i)); }
+  }
+  // glow
+  if(F.glow.on){ o.save(); o.shadowColor = C.accent; o.shadowBlur = F.glow.size*s*2; o.fillStyle = C.accent; o.fill(whole); o.fill(whole); o.restore(); }
+  // fill
+  if(C.fillOn){
+    for(const it of L.items){
+      let fill = letterColor(it, L.n);
+      if(F.gradient.on){
+        let y0 = 1e9, y1 = -1e9; for(const l of it.cs) for(const q of l){ if(q[1] > y1) y1 = q[1]; if(q[1] < y0) y0 = q[1]; }
+        const g = o.createLinearGradient(0, it.base-Math.max(y1,300)*s, 0, it.base-Math.min(y0,0)*s);
+        const t = F.gradient.type|0;
+        if(t===0){ g.addColorStop(0, fill); g.addColorStop(1, C.accent); }
+        else if(t===1){ [lighten(fill,.85), lighten(fill,.2), fill, darken(fill,.55), lighten(fill,.6), darken(fill,.25), lighten(fill,.15), darken(fill,.6)].forEach((c,i)=>g.addColorStop([0,.28,.42,.5,.53,.7,.82,1][i], c)); }
+        else { ['#FFF3B0','#F5C542','#B8860B','#FFE68A','#8A5A00'].forEach((c,i)=>g.addColorStop(i/4, c)); }
+        fill = g;
+      }
+      o.fillStyle = fill; o.fill(it.path);
+      if(F.shine.on){
+        const a = Math.max(2, 22*s*F.shine.amount), b = Math.max(2, 12*s*F.shine.amount), base = letterColor(it, L.n);
+        o.save(); o.clip(it.path);
+        o.fillStyle = darken(base,.45); o.fillRect(0,0,W,H);
+        const up = tr(it.path, -a*.5, -a*.5);
+        o.fillStyle = lighten(base,.75); o.fill(up);
+        o.save(); o.clip(up); o.fillStyle = fill; o.fill(tr(it.path, b, b)); o.restore();
+        o.restore();
+      }
+    }
+  }
+  // hatch
+  if(F.hatch.on){
+    o.save(); o.clip(whole); o.strokeStyle = C.accent; o.lineWidth = Math.max(.6, F.hatch.thick*s*.6); o.lineCap='butt';
+    const gap = Math.max(2, F.hatch.gap*s), a = rad(F.hatch.angle), D = Math.hypot(W,H);
+    o.translate(W/2,H/2); o.rotate(a); o.beginPath();
+    for(let y=-D; y<=D; y+=gap){ o.moveTo(-D,y); o.lineTo(D,y); }
+    o.stroke(); o.restore();
+  }
+  // sketch
+  if(F.sketch.on){
+    o.save(); o.strokeStyle = C.fill; o.lineWidth = Math.max(.8, 1.3*s*3); o.globalAlpha = .75;
+    const amp = F.sketch.jitter*s*1.4;
+    for(let p=0;p<F.sketch.passes;p++){
+      for(const it of L.items){
+        const path = new Path2D();
+        for(const l of it.cs){
+          const n = l.length, ph = N.hash(it.i, p, 11)*6.28;
+          for(let i=0;i<=n;i++){ const q = l[i%n]; const t = i/n*6.28*2; const j = amp*(Math.sin(t*1.7+ph)+.6*Math.sin(t*4.3+ph*2)); const nx = j*(N.hash(i,p,it.i)-.5)*2;
+            const x = it.x+(q[0]+q[1]*k)*s + nx, y = it.base-q[1]*s + j*(N.hash(i+7,p,it.i)-.5)*2;
+            i ? path.lineTo(x,y) : path.moveTo(x,y); }
+        }
+        o.stroke(path);
+      }
+    }
+    o.restore();
+  }
+  // neon (tube along the skeleton)
+  if(F.neon.on){
+    const tube = F.neon.tube*s, core = lighten(C.fill,.72);
+    o.save();
+    for(const it of L.items){
+      const g = S.glyphs[it.ch];
+      g.s.forEach((st, si) => {
+        const pts = N.sampleStroke(st, S.shape.tension, 1, 6, 1);
+        const p = new Path2D();
+        pts.forEach((q,i) => { const x = it.x+(q[0]+q[1]*k)*s, y = it.base-q[1]*s; i ? p.lineTo(x,y) : p.moveTo(x,y); });
+        const dim = N.hash(it.i, si, S.shape.seed+3) < F.neon.broken;
+        o.globalAlpha = dim ? .16 : 1;
+        o.shadowColor = C.fill; o.strokeStyle = C.fill;
+        o.shadowBlur = tube*2.6; o.lineWidth = tube; o.stroke(p); if(!dim) o.stroke(p);
+        o.shadowBlur = tube*.8; o.lineWidth = tube*.6; o.strokeStyle = core; o.stroke(p);
+        o.shadowBlur = 0; o.lineWidth = tube*.3; o.strokeStyle = '#FFFFFF'; o.globalAlpha = dim ? .12 : .85; o.stroke(p);
+      });
+    }
+    o.restore();
+  }
+  // grunge (erase speckles from the whole stack)
+  if(F.grunge.on && F.grunge.amount > 0){
+    o.save(); o.globalCompositeOperation = 'destination-out'; o.globalAlpha = F.grunge.amount;
+    const sc = Math.max(.4, s/.3); o.scale(sc, sc); o.fillStyle = grungePattern(o, F.grunge.grain); o.fillRect(0,0,W/sc,H/sc); o.restore();
+  }
+  ctx.drawImage(off, 0, 0, W, H);
+  return L;
+}
+
+// ---------- preview
+const pv = $('preview');
+let fast = false, pvQueued = false;
+function drawPreview(){
+  if(pvQueued) return; pvQueued = true;
+  requestAnimationFrame(() => {
+    pvQueued = false;
+    const dpr = Math.min(2, window.devicePixelRatio||1);
+    const W = pv.clientWidth, H = pv.clientHeight;
+    if(pv.width !== W*dpr || pv.height !== H*dpr){ pv.width = W*dpr; pv.height = H*dpr; }
+    const ctx = pv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+    $('stage').style.background = S.col.bg;
+    lastL = render(ctx, W, H, dpr, fast ? 14 : 9, false);
+    drawPick(ctx);
+  });
+}
+
+// ---------- move letters by hand (offsets in em units, y up, keyed by letter position)
+let lastL = null, pick = null, mv = null;
+const hitCtx = document.createElement('canvas').getContext('2d');
+function letterBox(i){
+  if(!lastL) return null;
+  let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+  for(const it of lastL.items){ if(it.i !== i || !it.cs) continue;
+    for(const l of it.cs) for(const q of l){ const x = it.x+(q[0]+q[1]*lastL.k)*lastL.s, y = it.base-q[1]*lastL.s; if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y; } }
+  return x0 < x1 ? [x0, y0, x1, y1] : null;
+}
+function drawPick(ctx){
+  if(pick === null) return;
+  const b = letterBox(pick); if(!b) return;
+  const pad = 6;
+  ctx.save(); ctx.setLineDash([5,4]); ctx.lineWidth = 1.5;
+  ctx.strokeStyle = lum(S.col.bg) > .5 ? 'rgba(0,0,0,.55)' : 'rgba(255,255,255,.7)';
+  ctx.strokeRect(b[0]-pad, b[1]-pad, b[2]-b[0]+pad*2, b[3]-b[1]+pad*2); ctx.restore();
+}
+function hitLetter(x, y){
+  if(!lastL) return null;
+  for(let n = lastL.items.length-1; n >= 0; n--){ const it = lastL.items[n]; if(it.path && hitCtx.isPointInPath(it.path, x, y)) return it.i; }
+  let best = null, bd = 0.45*1000*lastL.s;
+  for(const it of lastL.items){ if(it.mark) continue; const cx = it.x + (it.w||500)*lastL.s/2, cy = it.base - 280*lastL.s, d = Math.hypot(x-cx, y-cy); if(d < bd){ bd = d; best = it.i; } }
+  return best;
+}
+function syncMove(){
+  const has = pick !== null;
+  $('mvSel').textContent = has ? 'נבחרה אות ' + (pick+1) : 'לא נבחרה אות';
+  $('mvOne').disabled = !has || !S.offs[pick];
+  $('mvAll').disabled = !Object.keys(S.offs).length;
+}
+function nudge(dx, dy){
+  if(pick === null) return;
+  const o = S.offs[pick] || [0,0];
+  S.offs[pick] = [Math.round(o[0]+dx), Math.round(o[1]+dy)];
+  syncMove(); drawPreview(); save();
+}
+pv.tabIndex = 0;
+pv.addEventListener('pointerdown', e => {
+  const r = pv.getBoundingClientRect(), x = e.clientX-r.left, y = e.clientY-r.top;
+  pick = hitLetter(x, y);
+  try{ pv.focus({preventScroll:true}); }catch(err){}
+  if(pick !== null){ const o = S.offs[pick] || [0,0]; mv = {x, y, o0:o.slice(), id:e.pointerId}; pv.setPointerCapture(e.pointerId); pv.classList.add('grab'); }
+  syncMove(); drawPreview();
+});
+pv.addEventListener('pointermove', e => {
+  if(!mv || !lastL) return;
+  const r = pv.getBoundingClientRect(), s = lastL.s;
+  S.offs[pick] = [Math.round(mv.o0[0] + (e.clientX-r.left-mv.x)/s), Math.round(mv.o0[1] - (e.clientY-r.top-mv.y)/s)];
+  fast = true; drawPreview();
+});
+const endMove = () => { if(!mv) return; mv = null; pv.classList.remove('grab'); fast = false; syncMove(); drawPreview(); save(); };
+pv.addEventListener('pointerup', endMove); pv.addEventListener('pointercancel', endMove);
+pv.addEventListener('keydown', e => {
+  const st = e.shiftKey ? 60 : 12, m = {ArrowLeft:[-st,0], ArrowRight:[st,0], ArrowUp:[0,st], ArrowDown:[0,-st]}[e.key];
+  if(m && pick !== null){ e.preventDefault(); nudge(m[0], m[1]); }
+  if(e.key === 'Escape'){ pick = null; syncMove(); drawPreview(); }
+});
+
+// ---------- UI builders
+function slider(box, d, get, set, onLive, onDone){
+  const [k,l,min,max,step] = d;
+  const row = document.createElement('div'); row.className='slider';
+  row.innerHTML = `<label for="s_${k}_${Math.random().toString(36).slice(2,6)}">${l}</label><input type="range" min="${min}" max="${max}" step="${step}"><output></output>`;
+  const inp = row.querySelector('input'), out = row.querySelector('output'), lab = row.querySelector('label'); inp.id = lab.htmlFor;
+  const show = () => { const v = get(); out.textContent = d[5] ? d[5][v] : (step < 1 ? (+v).toFixed(2) : String(v)); inp.value = v; };
+  inp.addEventListener('input', () => { set(+inp.value); show(); onLive(); });
+  inp.addEventListener('change', () => { onDone(); });
+  box.append(row); show();
+  return show;
+}
+const syncers = [];
+function buildShape(){
+  const seg = $('shapeSeg'); seg.innerHTML = '';
+  for(const [k,v] of Object.entries(SHAPES)){
+    const b = document.createElement('button'); b.type='button'; b.textContent = v.name; b.dataset.v = k; b.setAttribute('aria-pressed', S.shape.mode===k);
+    b.onclick = () => { S.shape.mode = k; S.preset = ''; buildShape(); markPresets(); refreshAll(); save(); };
+    seg.append(b);
+  }
+  const box = $('shapeSliders'); box.innerHTML = '';
+  for(const d of SHAPES[S.shape.mode].sl) slider(box, d, () => S.shape[d[0]], v => { S.shape[d[0]] = v; S.preset=''; }, () => { fast = true; drawPreview(); markPresets(); }, () => { fast = false; refreshAll(); save(); });
+  $('capsRow').hidden = S.shape.mode !== 'mono';
+  $('capsSeg').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.shape.caps));
+  $('seedv').textContent = 'זרימה #'+S.shape.seed;
+}
+$('capsSeg').querySelectorAll('button').forEach(b => b.onclick = () => { S.shape.caps = b.dataset.v; buildShape(); refreshAll(); save(); });
+$('stir').onclick = () => { S.shape.seed = (S.shape.seed % 97) + 1 + Math.floor(Math.random()*5); buildShape(); refreshAll(); save(); };
+
+function buildColors(){
+  $('cFill').value = S.col.fill; $('cBg').value = S.col.bg; $('cAccent').value = S.col.accent; $('fillOn').checked = !!S.col.fillOn;
+  $('colMode').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.col.mode));
+}
+[['cFill','fill'],['cBg','bg'],['cAccent','accent']].forEach(([id,k]) => {
+  $(id).addEventListener('input', () => { S.col[k] = $(id).value; S.preset=''; fast = true; drawPreview(); markPresets(); });
+  $(id).addEventListener('change', () => { fast = false; drawPreview(); save(); });
+});
+$('fillOn').addEventListener('change', () => { S.col.fillOn = $('fillOn').checked; S.preset=''; markPresets(); drawPreview(); save(); });
+$('colMode').querySelectorAll('button').forEach(b => b.onclick = () => { S.col.mode = b.dataset.v; buildColors(); drawPreview(); save(); });
+
+function buildFx(){
+  const box = $('fxList'); box.innerHTML = '';
+  for(const k of FXORDER){
+    const def = FX[k], st = S.fx[k];
+    const el = document.createElement('div'); el.className = 'fx' + (st.on ? ' on' : '');
+    const h = document.createElement('label'); h.className = 'fxh';
+    h.innerHTML = `<input type="checkbox" ${st.on?'checked':''}><b>${def.name}</b><small>${k}</small>`;
+    const cb = h.querySelector('input');
+    cb.addEventListener('change', () => { st.on = cb.checked; el.classList.toggle('on', st.on); S.preset=''; markPresets(); drawPreview(); save(); });
+    const body = document.createElement('div'); body.className = 'fxb';
+    for(const d of def.sl){ const dd = def.names ? d.concat([def.names]) : d; slider(body, dd, () => st[d[0]], v => { st[d[0]] = v; S.preset=''; }, () => { fast = true; drawPreview(); markPresets(); }, () => { fast = false; drawPreview(); save(); }); }
+    el.append(h, body); box.append(el);
+  }
+}
+function buildLayout(){
+  const box = $('layoutSliders'); box.innerHTML = '';
+  for(const d of LAYOUT) slider(box, d, () => S[d[0]], v => { S[d[0]] = v; }, () => { fast = true; drawPreview(); }, () => { fast = false; drawPreview(); save(); });
+}
+function buildPresets(){
+  const box = $('presets'); box.innerHTML = '';
+  for(const [k,P] of Object.entries(PRESETS)){
+    const b = document.createElement('button'); b.type='button'; b.className='chip'; b.dataset.k = k;
+    const sw = document.createElement('i'); sw.style.background = P.sw; sw.style.boxShadow = `0 0 0 3px ${P.col.bg}`;
+    b.append(sw, document.createTextNode(P.name));
+    b.onclick = () => { applyPreset(k); rebuild(); refreshAll(); save(); };
+    box.append(b);
+  }
+  const mine = $('mine'); mine.innerHTML = ''; mine.hidden = !S.styles.length;
+  S.styles.forEach((st, i) => {
+    const w = document.createElement('span'); w.className = 'minewrap';
+    const b = document.createElement('button'); b.type='button'; b.className='chip mine'; b.dataset.k = 'mine:'+i;
+    const sw = document.createElement('i'); sw.style.background = st.col.fill; sw.style.boxShadow = `0 0 0 3px ${st.col.bg}`;
+    b.append(sw, document.createTextNode(st.name));
+    b.onclick = () => { applyPreset('mine:'+i, st); rebuild(); refreshAll(); save(); };
+    const x = document.createElement('button'); x.type='button'; x.className='x'; x.textContent='×'; x.setAttribute('aria-label','מחיקת הסגנון ' + st.name);
+    x.onclick = () => {
+      S.styles.splice(i,1);
+      if(S.preset.startsWith('mine:')){ const j = +S.preset.slice(5); S.preset = j === i ? '' : (j > i ? 'mine:'+(j-1) : S.preset); }
+      buildPresets(); save(); toast('הסגנון נמחק');
+    };
+    w.append(b, x); mine.append(w);
+  });
+  markPresets();
+}
+function markPresets(){ document.querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === S.preset)); }
+function rebuild(){ buildShape(); buildColors(); buildFx(); buildLayout(); markPresets(); }
+
+$('saveStyle').onclick = () => {
+  const name = $('styleName').value.trim() || ('סגנון ' + (S.styles.length+1));
+  const st = Object.assign({name}, styleOf());
+  const i = S.styles.findIndex(x => x.name === name);
+  if(i >= 0) S.styles[i] = st; else S.styles.push(st);
+  S.preset = 'mine:' + (i >= 0 ? i : S.styles.length-1);
+  $('styleName').value = ''; buildPresets(); save(); toast('נשמר: ' + name);
+};
+$('surprise').onclick = () => {
+  const keys = Object.keys(PRESETS), key = keys[Math.floor(Math.random()*keys.length)];
+  applyPreset(key);
+  const h = Math.random()*360, dark = Math.random() < .5;
+  S.col.bg = dark ? hsl(h+180, 30+Math.random()*30, 8+Math.random()*8) : hsl(h+180, 35+Math.random()*30, 88+Math.random()*8);
+  S.col.fill = hsl(h, 70+Math.random()*25, dark ? 55+Math.random()*15 : 30+Math.random()*25);
+  S.col.accent = hsl(h+ (Math.random()<.5 ? 40 : -40) + (Math.random()<.3 ? 180 : 0), 75, dark ? 65 : 40);
+  if(S.shape.mode==='liquid'){ S.shape.melt = Math.round(Math.random()*120); S.shape.wobble = Math.random()<.5 ? 0 : Math.round(Math.random()*16); }
+  if(S.shape.mode==='pixel') S.shape.px = 24 + Math.round(Math.random()*40);
+  if(S.shape.mode==='mono') S.shape.width = 16 + Math.round(Math.random()*60);
+  const extra = FXORDER.filter(k => !S.fx[k].on && !['neon','sketch','hatch'].includes(k));
+  if(Math.random()<.6){ const k = extra[Math.floor(Math.random()*extra.length)]; S.fx[k].on = true; }
+  S.col.mode = Math.random()<.25 ? ['alt','flow','rainbow'][Math.floor(Math.random()*3)] : 'one';
+  S.shape.seed = 1+Math.floor(Math.random()*97); S.preset = '';
+  rebuild(); refreshAll(); save(); toast('הפתעה ✦');
+};
+
+// ---------- glyph grid + tabs
+const thumbs = {};
+function buildTabs(){
+  const box = $('tabs'); box.innerHTML='';
+  for(const g of N.GROUPS){ const b = document.createElement('button'); b.type='button'; b.textContent = g.name; b.setAttribute('aria-pressed', g.id===group); b.onclick = () => { group = g.id; buildTabs(); buildGrid(); drawThumbs(); }; box.append(b); }
+}
+function groupChars(){ return N.GROUPS.find(g => g.id===group).chars; }
+function buildGrid(){
+  const box = $('glyphs'); box.innerHTML='';
+  for(const k in thumbs) delete thumbs[k];
+  for(const ch of groupChars()){
+    const b = document.createElement('button'); b.type='button'; b.className='gl'; b.setAttribute('aria-label','עריכת '+ch);
+    const c = document.createElement('canvas'); b.append(c); box.append(b);
+    b.onclick = () => { cur = ch; sel = null; undoStack.length = 0; markGrid(); drawEd(); syncFields(); };
+    thumbs[ch] = {b, c};
+  }
+  if(!thumbs[cur]){ cur = groupChars()[0]; sel = null; drawEd(); syncFields(); }
+  markGrid();
+}
+function markGrid(){
+  for(const ch in thumbs){ const t = thumbs[ch]; t.b.setAttribute('aria-pressed', ch===cur); t.b.classList.toggle('edited', JSON.stringify(S.glyphs[ch]) !== JSON.stringify(N.BASE[ch])); }
+}
+function drawThumb(ch){
+  const t = thumbs[ch]; if(!t) return;
+  const dpr = Math.min(2, window.devicePixelRatio||1), W = t.c.clientWidth||50, H = t.c.clientHeight||50;
+  t.c.width = W*dpr; t.c.height = H*dpr;
+  const ctx = t.c.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+  const g = S.glyphs[ch], s = Math.min(W*0.8/Math.max(g.w,400), H*0.8/1150);
+  const cs = contours(ch, 22);
+  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#151714';
+  ctx.fill(pathOf(cs, (W - g.w*s)/2, H*0.1 + 860*s, s));
+}
+function drawThumbs(){ let i = 0; const list = Object.keys(thumbs); (function step(){ const end = Math.min(list.length, i+6); for(; i<end; i++) drawThumb(list[i]); if(i<list.length) requestAnimationFrame(step); })(); }
+
+// ---------- editor
+const ed = $('ed');
+let V = {s:1, ox:0, oy:0};
+function edColors(){ const cs = getComputedStyle(document.documentElement); const v = n => cs.getPropertyValue(n).trim(); return {ink:v('--ink'), muted:v('--muted'), line:v('--line'), accent:v('--accent'), rim:v('--rim'), raise:v('--raise')}; }
+const radiusOf = n => S.shape.mode==='mono' ? S.shape.width : n[2]*S.shape.mass;
+let edQueued = false, edFast = false;
+function drawEd(){
+  if(edQueued) return; edQueued = true;
+  requestAnimationFrame(() => {
+    edQueued = false;
+    const dpr = Math.min(2, window.devicePixelRatio||1), W = ed.clientWidth, H = ed.clientHeight;
+    if(ed.width !== W*dpr){ ed.width = W*dpr; ed.height = H*dpr; }
+    const ctx = ed.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+    const C = edColors(), g = S.glyphs[cur];
+    ctx.fillStyle = C.raise; ctx.fillRect(0,0,W,H);
+    const span = Math.max(g.w + 220, 1250);
+    V.s = Math.min(W, H) / span; V.ox = (W - g.w*V.s)/2; V.oy = H/2 + 300*V.s;
+    ctx.font = '11px ' + getComputedStyle(document.body).fontFamily; ctx.textAlign = 'right';
+    const guide = (y, label) => { const sy = V.oy - y*V.s; ctx.strokeStyle = C.line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0,sy); ctx.lineTo(W,sy); ctx.stroke(); ctx.fillStyle = C.muted; ctx.fillText(label, W-6, sy-4); };
+    guide(0,'קו בסיס'); guide(560,'גובה אות'); guide(-240,'יורדת'); guide(830,'עולה');
+    ctx.setLineDash([4,4]); ctx.strokeStyle = C.line;
+    [0, g.w].forEach(x => { const sx = V.ox + x*V.s; ctx.beginPath(); ctx.moveTo(sx,0); ctx.lineTo(sx,H); ctx.stroke(); });
+    ctx.setLineDash([]);
+    const cs = contours(cur, edFast ? 12 : 7);
+    ctx.globalAlpha = .9; ctx.fillStyle = C.ink; ctx.fill(pathOf(cs, V.ox, V.oy, V.s)); ctx.globalAlpha = 1;
+    g.s.forEach((st, si) => {
+      ctx.strokeStyle = C.accent; ctx.lineWidth = 1.5; ctx.beginPath();
+      st.forEach((n,i) => { const x = V.ox+n[0]*V.s, y = V.oy-n[1]*V.s; i ? ctx.lineTo(x,y) : ctx.moveTo(x,y); });
+      ctx.stroke();
+      st.forEach((n, ni) => {
+        const x = V.ox+n[0]*V.s, y = V.oy-n[1]*V.s, isSel = sel && sel.s===si && sel.n===ni;
+        if(isSel && S.shape.mode !== 'mono'){
+          const rr = radiusOf(n)*V.s;
+          ctx.strokeStyle = C.rim; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(x,y,rr,0,Math.PI*2); ctx.stroke();
+          ctx.fillStyle = C.rim; ctx.beginPath(); ctx.arc(x+rr, y, 6, 0, Math.PI*2); ctx.fill();
+        }
+        ctx.fillStyle = isSel ? C.rim : C.raise; ctx.strokeStyle = isSel ? C.rim : C.accent; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(x,y, isSel?7:5.5, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      });
+    });
+    $('edch').textContent = g.mark ? 'א'+cur : cur;
+    $('edinfo').textContent = g.s.length + ' קווים · ' + g.s.reduce((a,s)=>a+s.length,0) + ' נקודות';
+  });
+}
+function toGlyph(e){ const r = ed.getBoundingClientRect(); return {sx:e.clientX-r.left, sy:e.clientY-r.top}; }
+let drag = null;
+ed.addEventListener('pointerdown', e => {
+  const {sx, sy} = toGlyph(e), g = S.glyphs[cur];
+  if(sel){
+    const n = g.s[sel.s][sel.n], x = V.ox+n[0]*V.s, y = V.oy-n[1]*V.s, rr = radiusOf(n)*V.s;
+    const d = Math.hypot(sx-x, sy-y);
+    if(S.shape.mode !== 'mono' && Math.abs(d-rr) < 14 && d > 10){ drag = {mode:'r', x, y, snap:JSON.stringify(g), moved:false}; ed.setPointerCapture(e.pointerId); return; }
+  }
+  let best = null, bd = 1e9;
+  g.s.forEach((st, si) => st.forEach((n, ni) => { const d = Math.hypot(sx-(V.ox+n[0]*V.s), sy-(V.oy-n[1]*V.s)); if(d < bd){ bd = d; best = {s:si, n:ni}; } }));
+  if(best && bd < 22){ sel = best; drag = {mode:'m', snap:JSON.stringify(g), moved:false}; ed.setPointerCapture(e.pointerId); }
+  else sel = null;
+  syncFields(); drawEd();
+});
+ed.addEventListener('pointermove', e => {
+  if(!drag || !sel) return;
+  const {sx, sy} = toGlyph(e), n = S.glyphs[cur].s[sel.s][sel.n];
+  if(!drag.moved){ drag.moved = true; undoStack.push(drag.snap); if(undoStack.length > 60) undoStack.shift(); }
+  if(drag.mode === 'm'){ n[0] = Math.round((sx - V.ox)/V.s/5)*5; n[1] = Math.round((V.oy - sy)/V.s/5)*5; }
+  else { n[2] = Math.max(4, Math.round(Math.hypot(sx-drag.x, sy-drag.y)/V.s/S.shape.mass)); }
+  changed(true);
+});
+const endDrag = () => { if(!drag) return; const moved = drag.moved; drag = null; if(moved) changed(false); else { drawEd(); syncFields(); } };
+ed.addEventListener('pointerup', endDrag); ed.addEventListener('pointercancel', endDrag);
+function changed(live){
+  ver[cur] = (ver[cur]||0) + 1;
+  edFast = live; drawEd(); syncFields();
+  if(!live){ drawThumb(cur); markGrid(); drawPreview(); save(); }
+}
+function pushUndo(){ undoStack.push(JSON.stringify(S.glyphs[cur])); if(undoStack.length > 60) undoStack.shift(); }
+function syncFields(){
+  const has = !!sel, g = S.glyphs[cur];
+  ['fx','fy','fr'].forEach(id => $(id).disabled = !has);
+  $('delN').disabled = !has; $('addN').disabled = !has;
+  $('undo').disabled = !undoStack.length;
+  $('fw').value = g.w;
+  if(has){ const n = g.s[sel.s][sel.n]; $('fx').value = n[0]; $('fy').value = n[1]; $('fr').value = n[2]; }
+  else { $('fx').value = $('fy').value = $('fr').value = ''; }
+}
+[['fx',0],['fy',1],['fr',2]].forEach(([id,i]) => $(id).addEventListener('change', () => {
+  if(!sel) return; const v = +$(id).value; if(!isFinite(v)) return;
+  pushUndo(); S.glyphs[cur].s[sel.s][sel.n][i] = i===2 ? Math.max(4,v) : v; changed(false);
+}));
+$('fw').addEventListener('change', () => { const v = +$('fw').value; if(v>=0){ pushUndo(); S.glyphs[cur].w = v; changed(false); } });
+$('addN').onclick = () => {
+  if(!sel) return; pushUndo();
+  const st = S.glyphs[cur].s[sel.s], a = st[sel.n], b = st[sel.n+1];
+  const n = b ? [Math.round((a[0]+b[0])/2), Math.round((a[1]+b[1])/2), Math.round((a[2]+b[2])/2)] : [a[0]+60, a[1], a[2]];
+  st.splice(sel.n+1, 0, n); sel = {s:sel.s, n:sel.n+1}; changed(false);
+};
+$('delN').onclick = () => {
+  if(!sel) return; pushUndo();
+  const g = S.glyphs[cur], st = g.s[sel.s];
+  st.splice(sel.n, 1); if(!st.length) g.s.splice(sel.s, 1);
+  sel = null; changed(false);
+};
+$('addS').onclick = () => {
+  pushUndo(); const g = S.glyphs[cur], cx = Math.round(Math.max(g.w,270)/2);
+  g.s.push([[cx-80, 280, 45], [cx+80, 280, 45]]); sel = {s:g.s.length-1, n:1}; changed(false);
+};
+$('undo').onclick = () => { if(!undoStack.length) return; S.glyphs[cur] = JSON.parse(undoStack.pop()); sel = null; changed(false); };
+$('reset').onclick = () => { pushUndo(); S.glyphs[cur] = clone(N.BASE[cur]); sel = null; changed(false); toast('האות אופסה · אפשר לבטל'); };
+
+// ---------- text + misc inputs
+const txt = $('txt');
+txt.value = S.text;
+function syncText(){
+  const miss = [...new Set([...S.text].map(c => /[a-z]/.test(c) ? c.toUpperCase() : c).filter(c => !/\s/.test(c) && !S.glyphs[c]))];
+  const hint = $('stagehint');
+  hint.textContent = miss.length ? 'אין עדיין צורה ל: ' + miss.slice(0,6).join(' ') : 'גוררים אות כדי להזיז אותה';
+  hint.classList.toggle('warn', !!miss.length);
+  pv.setAttribute('aria-label', 'תצוגה מקדימה: ' + (S.text.trim() || 'ריק'));
+}
+txt.addEventListener('input', () => { S.text = txt.value; syncText(); drawPreview(); save(); });
+$('mvOne').onclick = () => { if(pick === null) return; delete S.offs[pick]; syncMove(); drawPreview(); save(); toast('האות חזרה למקום'); };
+$('mvAll').onclick = () => { S.offs = {}; pick = null; syncMove(); drawPreview(); save(); toast('כל האותיות חזרו למקום'); };
+$('fontName').addEventListener('change', () => { S.fontName = $('fontName').value.trim() || 'TzurFont'; save(); });
+$('transp').addEventListener('change', () => { S.transp = $('transp').checked; save(); });
+
+// ---------- persistence
+let db = null, saveT = null;
+function payload(){
+  const edits = {};
+  for(const ch of N.CHARS) if(JSON.stringify(S.glyphs[ch]) !== JSON.stringify(N.BASE[ch])) edits[ch] = S.glyphs[ch];
+  return {v:2, preset:S.preset, shape:S.shape, col:S.col, fx:S.fx, spacing:S.spacing, slant:S.slant, mix:S.mix, text:S.text, fontName:S.fontName, transp:S.transp, styles:S.styles, offs:S.offs, edits, savedAt:Date.now()};
+}
+function apply(p){
+  if(!p) return;
+  if(p.v === 1){ // legacy project from the liquid-only version
+    const map = {ink:'ink', mercury:'mercury', acid:'goo', molten:'lava', bubble:'goo', goo:'goo'};
+    applyPreset(map[p.flow] || 'ink'); if(p.P) Object.assign(S.shape, {mass:p.P.mass, melt:p.P.melt, tension:p.P.tension, wobble:p.P.wobble, smooth:p.P.smooth, seed:p.P.seed||5});
+  } else if(p.v === 2){
+    S.preset = p.preset || '';
+    S.shape = Object.assign({}, SHAPE0, p.shape||{});
+    S.col = Object.assign({fill:'#121412',bg:'#EDEEE8',accent:'#2B37F0',fillOn:true,mode:'one'}, p.col||{});
+    S.fx = freshFx(); for(const [k,v] of Object.entries(p.fx||{})) if(S.fx[k]) Object.assign(S.fx[k], v);
+    S.spacing = p.spacing||0; S.slant = p.slant||0; S.mix = p.mix||0;
+    S.offs = (p.offs && typeof p.offs === 'object') ? p.offs : {};
+    S.fontName = p.fontName || 'TzurFont'; S.transp = !!p.transp;
+    S.styles = Array.isArray(p.styles) ? p.styles.filter(s => s && s.shape && s.col && s.fx) : [];
+  } else return;
+  S.text = typeof p.text === 'string' ? p.text : S.text;
+  S.glyphs = clone(N.BASE);
+  for(const [ch,g] of Object.entries(p.edits||{})) if(S.glyphs[ch] && g && Array.isArray(g.s)) S.glyphs[ch] = Object.assign({}, S.glyphs[ch], g);
+  S.savedAt = p.savedAt||0;
+  for(const ch of N.CHARS) ver[ch] = (ver[ch]||0) + 1;
+  txt.value = S.text; $('fontName').value = S.fontName; $('transp').checked = S.transp; sel = null; undoStack.length = 0;
+  pick = null; buildPresets(); rebuild(); markGrid(); refreshAll(); syncFields(); syncMove(); syncText();
+}
+function setStatus(t, ok){ const el = $('status'); el.textContent = t; el.classList.toggle('ok', !!ok); }
+function save(){
+  clearTimeout(saveT);
+  setStatus('שומר…');
+  saveT = setTimeout(async () => {
+    const p = payload(); S.savedAt = p.savedAt;
+    try{ localStorage.setItem('nozli2', JSON.stringify(p)); }catch(e){}
+    if(db){
+      try{ await db.doc('fonts/main').set(p); setStatus('נשמר בענן', true); }
+      catch(e){ setStatus('נשמר בדפדפן בלבד'); }
+    } else setStatus('נשמר בדפדפן');
+  }, 1200);
+}
+
+// ---------- downloads
+function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(()=>t.classList.remove('on'), 2600); }
+async function offer(filename, data){
+  try{
+    const blob = data instanceof Blob ? data : new Blob([data], {type: filename.endsWith('.svg') ? 'image/svg+xml' : 'application/json'});
+    const url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = filename; document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    toast('ירד: ' + filename);
+  }catch(e){ toast('ההורדה לא הצליחה. נסו שוב'); }
+}
+const slug = () => (S.preset && !S.preset.startsWith('mine:') ? S.preset : S.shape.mode);
+const fname = ext => 'tzur-font-' + slug() + '.' + ext;
+function bigCanvas(W, H, cb){
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const ctx = c.getContext('2d'); ctx.setTransform(1,0,0,1,0,0);
+  const savedOff = offC; offC = null;
+  render(ctx, W, H, 1, 5, !!S.transp && cb === 'png');
+  offC = savedOff;
+  return c;
+}
+$('xPng').onclick = () => {
+  toast('מייצר תמונה…');
+  setTimeout(() => {
+    const W = 2400, H = Math.round(2400 * pv.clientHeight / pv.clientWidth) || 900;
+    bigCanvas(W, H, 'png').toBlob(b => b ? offer(fname('png'), b) : toast('יצירת התמונה נכשלה'), 'image/png');
+  }, 30);
+};
+$('xBoard').onclick = () => {
+  toast('מייצר לוח…');
+  const keep = S.text, keepOffs = S.offs;
+  S.text = 'אבגדהוזחטי\nכךלמםנןסעף\nפץצקרשת\n0123456789\nABCDEFGHIJKLM\nNOPQRSTUVWXYZ';
+  setTimeout(() => {
+    S.offs = {};
+    try{ bigCanvas(2400, 2400, 'png').toBlob(b => b ? offer('tzur-font-board-'+slug()+'.png', b) : toast('יצירת הלוח נכשלה'), 'image/png'); }
+    finally{ S.text = keep; S.offs = keepOffs; }
+  }, 30);
+};
+$('xSvg').onclick = () => {
+  const W = 2400, H = Math.round(2400 * pv.clientHeight / pv.clientWidth) || 900;
+  const L = layout(W, H), s = L.s, k = L.k;
+  let body = '';
+  for(const it of L.items){
+    const cs = contours(it.ch, 5, it.mark ? S.shape.mass : it.mass);
+    let d = '';
+    for(const l of cs){ const pts = N.simplify(l, 1); d += 'M' + pts.map(q => (it.x+(q[0]+q[1]*k)*s).toFixed(1)+' '+(it.base-q[1]*s).toFixed(1)).join('L') + 'Z'; }
+    body += `<path fill="${letterColor(it, L.n)}" fill-rule="nonzero" d="${d}"/>`;
+  }
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">${S.transp ? '' : `<rect width="100%" height="100%" fill="${S.col.bg}"/>`}${body}</svg>`;
+  offer(fname('svg'), svg);
+};
+$('xFont').onclick = async () => {
+  if(!window.opentype || !window.JSZip){ toast('ספריית הפונטים לא נטענה. נסו לרענן'); return; }
+  toast('בונה פונט…');
+  await new Promise(r => setTimeout(r, 30));
+  const O = window.opentype, k = Math.tan(S.slant*Math.PI/180);
+  const glyphs = [new O.Glyph({name:'.notdef', advanceWidth:500, path:new O.Path()}), new O.Glyph({name:'space', unicode:32, advanceWidth:280, path:new O.Path()})];
+  for(const ch of N.CHARS){
+    const g = S.glyphs[ch], path = new O.Path();
+    for(let l of contours(ch, 5)){
+      l = N.simplify(l, 0.9);
+      path.moveTo(Math.round(l[0][0]+l[0][1]*k), Math.round(l[0][1]));
+      for(let i=1;i<l.length;i++) path.lineTo(Math.round(l[i][0]+l[i][1]*k), Math.round(l[i][1]));
+      path.close();
+    }
+    glyphs.push(new O.Glyph({name:'uni'+ch.codePointAt(0).toString(16).toUpperCase().padStart(4,'0'), unicode:ch.codePointAt(0), advanceWidth:g.mark ? 0 : g.w, path}));
+  }
+  const fam = (S.fontName||'TzurFont').replace(/[^\w\- \u0590-\u05FF]/g,'').trim() || 'TzurFont';
+  const psFam = fam.replace(/[^A-Za-z0-9\-]/g,'') || 'TzurFont';
+  const styleName = (PRESETS[S.preset] ? S.preset[0].toUpperCase()+S.preset.slice(1) : SHAPES[S.shape.mode].name) + ' ' + S.shape.seed;
+  const font = new O.Font({familyName:fam, styleName, postScriptName:(psFam+'-'+styleName.replace(/[^A-Za-z0-9]/g,'')).slice(0,60), unitsPerEm:1000, ascender:900, descender:-300, glyphs});
+  const buf = font.toArrayBuffer();
+  const zip = new JSZip();
+  const base = fam.replace(/\s+/g,'') + '-' + slug() + '-' + S.shape.seed;
+  zip.file(base + '.otf', buf);
+  zip.file('קרא-אותי.txt', `${fam} · ${styleName}\nהתקנה: לחיצה כפולה על קובץ ה-OTF.\nהפונט מכיל עברית, ספרות, לטינית (אותיות גדולות), ניקוד בסיסי ופיסוק.\nצורה: ${SHAPES[S.shape.mode].name} · ${JSON.stringify(S.shape)}\n`);
+  const blob = await zip.generateAsync({type:'blob'});
+  offer(base + '.zip', blob);
+};
+$('xJson').onclick = () => offer('tzur-font-project.json', JSON.stringify(payload(), null, 1));
+$('imp').addEventListener('change', async () => {
+  const f = $('imp').files[0]; if(!f) return;
+  try{ apply(JSON.parse(await f.text())); save(); toast('הפרויקט נטען'); }
+  catch(e){ toast('הקובץ לא נקרא: צריך קובץ JSON שנשמר מכאן'); }
+  $('imp').value = '';
+});
+
+// ---------- control tabs
+function showPane(id){
+  if(!document.querySelector('[data-pane="'+id+'"]')) id = 'shape';
+  document.querySelectorAll('[data-pane]').forEach(p => p.hidden = p.dataset.pane !== id);
+  document.querySelectorAll('#tabbar [data-tab]').forEach(b => { const on = b.dataset.tab === id; b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1; });
+  try{ localStorage.setItem('nozli-tab', id); }catch(e){}
+  if(id === 'letters'){ drawEd(); drawThumbs(); }
+}
+$('tabbar').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if(b) showPane(b.dataset.tab); });
+$('tabbar').addEventListener('keydown', e => {
+  const list = [...document.querySelectorAll('#tabbar [data-tab]')], i = list.indexOf(document.activeElement);
+  if(i < 0) return; let j = -1;
+  if(e.key === 'ArrowLeft') j = (i+1) % list.length; else if(e.key === 'ArrowRight') j = (i-1+list.length) % list.length;
+  if(j >= 0){ e.preventDefault(); list[j].focus(); showPane(list[j].dataset.tab); }
+});
+{ let t = 'shape'; try{ t = localStorage.getItem('nozli-tab') || 'shape'; }catch(e){} showPane(t); }
+
+// ---------- boot
+function refreshAll(){ drawPreview(); drawEd(); drawThumbs(); }
+buildPresets(); rebuild(); buildTabs(); buildGrid(); syncFields(); syncMove(); syncText();
+try{ const raw = localStorage.getItem('nozli2') || localStorage.getItem('nozli'); if(raw) apply(JSON.parse(raw)); }catch(e){}
+refreshAll();
+setStatus('נשמר בדפדפן');
+new ResizeObserver(() => { drawPreview(); drawEd(); }).observe(document.body);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { drawEd(); drawThumbs(); });
+new MutationObserver(() => { drawEd(); drawThumbs(); }).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+
+})();
+</script>
+
+
+</body>
+</html>
